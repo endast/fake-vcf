@@ -24,7 +24,13 @@ fake-vcf generates fake [vcf files](https://en.wikipedia.org/wiki/Variant_Call_F
 
 ## Usage
 
-
+### Setup
+```shell
+git clone https://github.com/endast/fake-vcf.git
+cd fake-vcf
+make poetry-download
+make install
+```
 
 
 ## 📈 Releases
