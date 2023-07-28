@@ -1,11 +1,5 @@
-import gzip
 import random
-import sys
 from collections import deque
-from pathlib import Path
-
-import click
-import tqdm
 
 
 class VirtualVCF:
@@ -119,9 +113,9 @@ class VirtualVCF:
     def _generate_vcf_row(self):
         ref_index = random.randint(0, 3)
 
-        pos = self.positions[self.current_pos]
+        position = self.positions[self.current_pos]
         # Generate random values for each field in the VCF row
-        pos = f"{pos}"
+        pos = f"{position}"
         vid = f"rs{random.randint(1, 1000)}"
         ref = self.alleles[ref_index]
         alt = self.alleles[ref_index - random.randint(1, 2)]
@@ -130,8 +124,7 @@ class VirtualVCF:
         info = f"DP=10;AF=0.5;NS={self.num_samples}"
         fmt = "GT"
 
-        # Generate random values for each sample by rotating the sample list
-        # randomly
+        # Generate random values for each sample by rotating the sample list randomly
         self.avail_samples.rotate(random.randint(1, int(self.num_samples / 10)))
         samples = self.avail_samples.copy()
 
