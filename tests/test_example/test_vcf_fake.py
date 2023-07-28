@@ -1,4 +1,4 @@
-"""Tests for fake_vcf"""
+"""Tests for fake-vcf"""
 import typing
 
 import pytest
