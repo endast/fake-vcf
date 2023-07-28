@@ -2,7 +2,7 @@
 
 
 def hello(name: str) -> str:
-    """Just an greetings example.
+    """Just a greetings example.
 
     Args:
         name (str): Name to greet.

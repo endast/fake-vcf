@@ -12,8 +12,8 @@ import typer
 from rich.console import Console
 
 from fake_vcf import version
-from fake_vcf.example import hello
 from fake_vcf.vcf_faker import VirtualVCF
+from fake_vcf.vcf_generator import hello
 
 
 class Color(str, Enum):
