@@ -130,3 +130,27 @@ def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
     header_row = metadata.split("\n")[-2]
     sample_names = header_row.split("\t")[NR_NON_SAMPLE_COL:]
     assert sample_names == expected
+
+
+@pytest.mark.parametrize(
+    ("chromosome",),
+    [
+        *[(f"chromosome{c}",) for c in list(range(1, 23)) + ["X", "Y"]],
+        *[(f"chr{c}",) for c in list(range(1, 23)) + ["X", "Y"]],
+        *[(f"c{c}",) for c in list(range(1, 23)) + ["X", "Y"]],
+        *[(f"CHR{c}",) for c in list(range(1, 23)) + ["X", "Y"]],
+    ],
+)
+def test_fake_vcf_chromosome(chromosome):
+    virtual_vcf = VirtualVCF(
+        num_rows=1,
+        num_samples=1,
+        chromosome=chromosome,
+        sample_prefix="S",
+        random_seed=42,
+        phased=False,
+    )
+
+    data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
+    vcf_chromosome = data_rows[0].split("\t")[0]
+    assert vcf_chromosome == chromosome
