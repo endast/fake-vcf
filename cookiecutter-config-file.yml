@@ -2,7 +2,7 @@
 
 default_context:
   project_name: "fake-vcf"
-  project_description: "A vcf file simulator/generator"
+  project_description: "A fake vcf file generator"
   organization: "endast"
   license: "MIT"
   minimal_python_version: 3.10
