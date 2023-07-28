@@ -154,3 +154,19 @@ def test_fake_vcf_chromosome(chromosome):
     data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
     vcf_chromosome = data_rows[0].split("\t")[0]
     assert vcf_chromosome == chromosome
+
+
+def test_fake_vcf_reproducibility():
+    seed_value = 42
+
+    orig_virtual_vcf = VirtualVCF(
+        num_rows=1, num_samples=1, random_seed=seed_value, chromosome="chr1"
+    )
+
+    new_virtual_vcf = VirtualVCF(
+        num_rows=1, num_samples=1, random_seed=seed_value, chromosome="chr1"
+    )
+
+    orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
+    new_data = get_vcf_data(virtual_vcf=new_virtual_vcf)
+    assert orig_data == new_data
