@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 
 import typer
@@ -22,7 +21,7 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-@app.command(name="")
+@app.command(name="fake-vcf")
 def main(
     fake_vcf_path: Path = typer.Option(
         None,
