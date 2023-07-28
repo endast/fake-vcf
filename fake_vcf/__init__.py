@@ -1,4 +1,4 @@
-"""A vcf file simulator/generator"""
+""" A fake vcf file generator"""
 
 import sys
 from importlib import metadata as importlib_metadata

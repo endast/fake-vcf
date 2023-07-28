@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/github/license/fake_vcf/fake-vcf)](https://github.com/endast/fake-vcf/blob/master/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
 
-A vcf file simulator/generator
+A fake vcf file generator 
 
 </div>
 
@@ -397,7 +397,7 @@ See [LICENSE](https://github.com/endast/fake-vcf/blob/master/LICENSE) for more d
 ```bibtex
 @misc{fake-vcf,
   author = {fake-vcf},
-  title = {A vcf file simulator/generator},
+  title = { A fake vcf file generator },
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},

@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "fake-vcf"
 version = "0.1.0"
-description = "A vcf file simulator/generator"
+description = "A fake vcf file generator "
 readme = "README.md"
 authors = ["fake-vcf <endast@gmail.com>"]
 license = "MIT"
