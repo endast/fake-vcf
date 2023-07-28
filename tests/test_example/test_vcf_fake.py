@@ -114,6 +114,7 @@ def test_invalid_row_count(num_rows):
         (2, "SAM", ["SAM0000001", "SAM0000002"]),
         (3, "SAM", ["SAM0000001", "SAM0000002", "SAM0000003"]),
         (9, "SAM", [f"SAM000000{i}" for i in range(1, 10)]),
+        (9, "", [f"000000{i}" for i in range(1, 10)]),
     ],
 )
 def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
