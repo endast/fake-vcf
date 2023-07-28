@@ -17,7 +17,9 @@
 
 </div>
 
-fake-vcf generates fake [vcf files](https://en.wikipedia.org/wiki/Variant_Call_Format)
+*fake-vcf* generates fake [vcf files](https://en.wikipedia.org/wiki/Variant_Call_Format) for testing purposes.
+
+This is still a work in progress, originally created for the [DeepRVAT](https://github.com/PMBio/deeprvat) project. 
 
 ## Usage
 
