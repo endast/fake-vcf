@@ -1,19 +1,11 @@
-from typing import Optional
-
-import gzip
-import sys
 from enum import Enum
 from pathlib import Path
-from random import choice
 
-import click
-import tqdm
 import typer
 from rich.console import Console
 
 from fake_vcf import version
-from fake_vcf.vcf_faker import VirtualVCF
-from fake_vcf.vcf_generator import hello
+from fake_vcf.vcf_generator import fake_vcf
 
 
 class Color(str, Enum):
@@ -40,33 +32,7 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-@app.command(name="")
-def main(
-    name: str = typer.Option(..., help="Person to greet."),
-    color: Optional[Color] = typer.Option(
-        None,
-        "-c",
-        "--color",
-        "--colour",
-        case_sensitive=False,
-        help="Color for print. If not specified then choice will be random.",
-    ),
-    print_version: bool = typer.Option(
-        None,
-        "-v",
-        "--version",
-        callback=version_callback,
-        is_eager=True,
-        help="Prints the version of the fake-vcf package.",
-    ),
-) -> None:
-    """Print a greeting with a giving name."""
-    if color is None:
-        color = choice(list(Color))
-
-    greeting: str = hello(name)
-    console.print(f"[bold {color}]{greeting}[/]")
-
+"""
 
 @click.command()
 @click.option(
@@ -85,40 +51,38 @@ def main(
     help="Sample prefix ex: SAM =>  SAM0000001	SAM0000002",
 )
 @click.option("--phased/--no-phased", default=True, help="Simulate phased")
-def fake_vcf(
-    fake_vcf_path, num_rows, num_samples, chromosome, seed, sample_prefix, phased
-):
-    virtual_vcf = VirtualVCF(
-        num_rows=num_rows,
-        num_samples=num_samples,
-        chromosome=chromosome,
-        sample_prefix=sample_prefix,
-        random_seed=seed,
-        phased=phased,
+
+"""
+
+
+@app.command(name="")
+def main(
+    fake_vcf_path: Path = typer.Option(
+        None,
+        "--fake_vcf_path",
+        "-o",
+        case_sensitive=False,
+        help="Path to fake vcf file.",
+    ),
+    num_rows: int = typer.Option(),
+    print_version: bool = typer.Option(
+        None,
+        "-v",
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Prints the version of the fake-vcf package.",
+    ),
+) -> None:
+    fake_vcf(
+        fake_vcf_path=fake_vcf_path,
+        num_rows=None,
+        num_samples=None,
+        chromosome=None,
+        seed=None,
+        sample_prefix=None,
+        phased=None,
     )
-
-    if fake_vcf_path is None:
-        with virtual_vcf as v_vcf:
-            for line in v_vcf:
-                sys.stdout.write(line)
-        return
-
-    print(f"Writing to file {fake_vcf_path}")
-
-    if fake_vcf_path.suffix == ".gz":
-        print("(Using compression)")
-        with gzip.open(fake_vcf_path, "wt") as gz_file, virtual_vcf as v_vcf:
-            for line in tqdm.tqdm(v_vcf, total=num_rows + 1):
-                gz_file.write(line)
-    else:
-        print("(No compression)")
-        with open(
-            fake_vcf_path, "w", encoding="utf-8"
-        ) as txt_file, virtual_vcf as v_vcf:
-            for line in tqdm.tqdm(v_vcf, total=num_rows + 1):
-                txt_file.write(line)
-
-    print(f"Done, data written to {fake_vcf_path}")
 
 
 if __name__ == "__main__":
