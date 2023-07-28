@@ -1,6 +1,8 @@
 import random
 from collections import deque
 
+from fake_vcf import version
+
 
 class VirtualVCF:
     def __init__(
@@ -24,7 +26,7 @@ class VirtualVCF:
             "\n".join(
                 [
                     "##fileformat=VCFv4.2",
-                    "##source=StegosaurusVCFaker",
+                    f"##source=VCFake {version}",
                     '##FILTER=<ID=PASS,Description="All filters passed">',
                     '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
                     f"##contig=<ID={chromosome}>",
