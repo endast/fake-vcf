@@ -8,9 +8,9 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/endast/fake-vcf/blob/master/.pre-commit-config.yaml)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/endast/fake-vcf/blob/main/.pre-commit-config.yaml)
 [![Semantic Versions](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--versions-e10079.svg)](https://github.com/endast/fake-vcf/releases)
-[![License](https://img.shields.io/github/license/fake_vcf/fake-vcf)](https://github.com/endast/fake-vcf/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/fake_vcf/fake-vcf)](https://github.com/endast/fake-vcf/blob/main/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
 
 A fake vcf file generator 
@@ -120,8 +120,8 @@ Articles:
 
 - Supports for `Python 3.10` and higher.
 - [`Poetry`](https://python-poetry.org/) as the dependencies manager. See configuration
-  in [`pyproject.toml`](https://github.com/endast/fake-vcf/blob/master/pyproject.toml)
-  and [`setup.cfg`](https://github.com/endast/fake-vcf/blob/master/setup.cfg).
+  in [`pyproject.toml`](https://github.com/endast/fake-vcf/blob/main/pyproject.toml)
+  and [`setup.cfg`](https://github.com/endast/fake-vcf/blob/main/setup.cfg).
 - Automatic codestyle with [`black`](https://github.com/psf/black), [`isort`](https://github.com/timothycrosley/isort)
   and [`pyupgrade`](https://github.com/asottile/pyupgrade).
 - Ready-to-use [`pre-commit`](https://pre-commit.com/) hooks with code-formatting.
@@ -130,36 +130,36 @@ Articles:
   with[`bandit`](https://github.com/PyCQA/bandit)
 - Testing with [`pytest`](https://docs.pytest.org/en/latest/).
 -
-Ready-to-use [`.editorconfig`](https://github.com/endast/fake-vcf/blob/master/.editorconfig), [`.dockerignore`](https://github.com/endast/fake-vcf/blob/master/.dockerignore),
-and [`.gitignore`](https://github.com/endast/fake-vcf/blob/master/.gitignore). You don't have to worry about those
+Ready-to-use [`.editorconfig`](https://github.com/endast/fake-vcf/blob/main/.editorconfig), [`.dockerignore`](https://github.com/endast/fake-vcf/blob/main/.dockerignore),
+and [`.gitignore`](https://github.com/endast/fake-vcf/blob/main/.gitignore). You don't have to worry about those
 things.
 
 ### Deployment features
 
 - `GitHub` integration: issue and pr templates.
 - `Github Actions` with
-  predefined [build workflow](https://github.com/endast/fake-vcf/blob/master/.github/workflows/build.yml) as the default
+  predefined [build workflow](https://github.com/endast/fake-vcf/blob/main/.github/workflows/build.yml) as the default
   CI/CD.
 - Everything is already set up for security checks, codestyle checks, code formatting, testing, linting, docker builds,
-  etc with [`Makefile`](https://github.com/endast/fake-vcf/blob/master/Makefile#L89). More details
+  etc with [`Makefile`](https://github.com/endast/fake-vcf/blob/main/Makefile#L89). More details
   in [makefile-usage](#makefile-usage).
-- [Dockerfile](https://github.com/endast/fake-vcf/blob/master/docker/Dockerfile) for your package.
+- [Dockerfile](https://github.com/endast/fake-vcf/blob/main/docker/Dockerfile) for your package.
 - Always up-to-date dependencies with [`@dependabot`](https://dependabot.com/). You will
   only [enable it](https://docs.github.com/en/github/administering-a-repository/enabling-and-disabling-version-updates#enabling-github-dependabot-version-updates).
 - Automatic drafts of new releases with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). You
   may see the list of labels
-  in [`release-drafter.yml`](https://github.com/endast/fake-vcf/blob/master/.github/release-drafter.yml). Works
+  in [`release-drafter.yml`](https://github.com/endast/fake-vcf/blob/main/.github/release-drafter.yml). Works
   perfectly with [Semantic Versions](https://semver.org/) specification.
 
 ### Open source community features
 
 -
-Ready-to-use [Pull Requests templates](https://github.com/endast/fake-vcf/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
+Ready-to-use [Pull Requests templates](https://github.com/endast/fake-vcf/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
 and several [Issue templates](https://github.com/endast/fake-vcf/tree/master/.github/ISSUE_TEMPLATE).
 - Files such as: `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md` are generated automatically.
 - [`Stale bot`](https://github.com/apps/stale) that closes abandoned issues after a period of inactivity. (You will
   only [need to setup free plan](https://github.com/marketplace/stale)). Configuration
-  is [here](https://github.com/endast/fake-vcf/blob/master/.github/.stale.yml).
+  is [here](https://github.com/endast/fake-vcf/blob/main/.github/.stale.yml).
 - [Semantic Versions](https://semver.org/) specification
   with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter).
 
@@ -189,7 +189,7 @@ poetry run fake-vcf --help
 
 ### Makefile usage
 
-[`Makefile`](https://github.com/endast/fake-vcf/blob/master/Makefile) contains a lot of functions for faster
+[`Makefile`](https://github.com/endast/fake-vcf/blob/main/Makefile) contains a lot of functions for faster
 development.
 
 <details>
@@ -380,17 +380,17 @@ categorize pull requests in release notes using labels.
 |            `dependencies`             | ⬆️ Dependencies updates |
 
 You can update it
-in [`release-drafter.yml`](https://github.com/endast/fake-vcf/blob/master/.github/release-drafter.yml).
+in [`release-drafter.yml`](https://github.com/endast/fake-vcf/blob/main/.github/release-drafter.yml).
 
 GitHub creates the `bug`, `enhancement`, and `documentation` labels for you. Dependabot creates the `dependencies`
 label. Create the remaining labels on the Issues tab of your GitHub repository, when you need them.
 
 ## 🛡 License
 
-[![License](https://img.shields.io/github/license/fake_vcf/fake-vcf)](https://github.com/endast/fake-vcf/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/fake_vcf/fake-vcf)](https://github.com/endast/fake-vcf/blob/main/LICENSE)
 
 This project is licensed under the terms of the `MIT` license.
-See [LICENSE](https://github.com/endast/fake-vcf/blob/master/LICENSE) for more details.
+See [LICENSE](https://github.com/endast/fake-vcf/blob/main/LICENSE) for more details.
 
 ## 📃 Citation
 
