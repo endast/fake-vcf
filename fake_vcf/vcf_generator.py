@@ -1,29 +1,19 @@
 import gzip
 import sys
+from pathlib import Path
 
 import tqdm
 
 from fake_vcf.vcf_faker import VirtualVCF
 
 
-def fake_vcf(
-    fake_vcf_path, num_rows, num_samples, chromosome, seed, sample_prefix, phased
-):
-    virtual_vcf = VirtualVCF(
-        num_rows=num_rows,
-        num_samples=num_samples,
-        chromosome=chromosome,
-        sample_prefix=sample_prefix,
-        random_seed=seed,
-        phased=phased,
-    )
+def to_std_out(virtual_vcf: VirtualVCF):
+    with virtual_vcf as v_vcf:
+        for line in v_vcf:
+            sys.stdout.write(line)
 
-    if fake_vcf_path is None:
-        with virtual_vcf as v_vcf:
-            for line in v_vcf:
-                sys.stdout.write(line)
-        return
 
+def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int):
     print(f"Writing to file {fake_vcf_path}")
 
     if fake_vcf_path.suffix == ".gz":
@@ -40,3 +30,22 @@ def fake_vcf(
                 txt_file.write(line)
 
     print(f"Done, data written to {fake_vcf_path}")
+
+
+def fake_vcf(
+    fake_vcf_path, num_rows, num_samples, chromosome, seed, sample_prefix, phased
+):
+    virtual_vcf = VirtualVCF(
+        num_rows=num_rows,
+        num_samples=num_samples,
+        chromosome=chromosome,
+        sample_prefix=sample_prefix,
+        random_seed=seed,
+        phased=phased,
+    )
+
+    if fake_vcf_path is None:
+        to_std_out(virtual_vcf=virtual_vcf)
+        return
+
+    to_vcf_file(virtual_vcf=virtual_vcf, fake_vcf_path=fake_vcf_path, num_rows=num_rows)
