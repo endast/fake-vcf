@@ -7,13 +7,13 @@ import tqdm
 from fake_vcf.vcf_faker import VirtualVCF
 
 
-def to_std_out(virtual_vcf: VirtualVCF):
+def to_std_out(virtual_vcf: VirtualVCF) -> None:
     with virtual_vcf as v_vcf:
         for line in v_vcf:
             sys.stdout.write(line)
 
 
-def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int):
+def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int) -> None:
     print(f"Writing to file {fake_vcf_path}")
 
     if fake_vcf_path.suffix == ".gz":
