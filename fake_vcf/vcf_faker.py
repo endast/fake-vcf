@@ -20,7 +20,8 @@ class VirtualVCF:
         self.chromosome = chromosome
         self.sample_prefix = sample_prefix
         self.phased = phased
-        random.seed(random_seed)
+        # Use a per instance seed for reproducibility
+        self.random = random.Random(random_seed)
 
         self.header = (
             "\n".join(
@@ -68,7 +69,7 @@ class VirtualVCF:
             ]
 
         self.avail_samples = deque(
-            random.choices(
+            self.random.choices(
                 self.sample_values,
                 weights=self.sample_value_weights,
                 k=self.num_samples,
@@ -78,7 +79,9 @@ class VirtualVCF:
         self.alleles = ["A", "C", "G", "T"]
 
         # Generate and sort positions
-        self.positions = random.sample(range(1, self.num_rows * 100), self.num_rows)
+        self.positions = self.random.sample(
+            range(1, self.num_rows * 100), self.num_rows
+        )
         self.positions.sort()
 
         self.current_pos = 0
@@ -116,16 +119,16 @@ class VirtualVCF:
         return self.header
 
     def _generate_vcf_row(self):
-        ref_index = random.randint(0, 3)
+        ref_index = self.random.randint(0, 3)
 
         position = self.positions[self.current_pos]
         # Generate random values for each field in the VCF row
         pos = f"{position}"
-        vid = f"rs{random.randint(1, 1000)}"
+        vid = f"rs{self.random.randint(1, 1000)}"
         ref = self.alleles[ref_index]
-        alt = self.alleles[ref_index - random.randint(1, 2)]
-        qual = f"{random.randint(10, 100)}"
-        filt = random.choice(["PASS"])
+        alt = self.alleles[ref_index - self.random.randint(1, 2)]
+        qual = f"{self.random.randint(10, 100)}"
+        filt = self.random.choice(["PASS"])
         info = f"DP=10;AF=0.5;NS={self.num_samples}"
         fmt = "GT"
 
@@ -133,7 +136,7 @@ class VirtualVCF:
         max_rotation = (
             int(self.num_samples / 10) if self.num_samples >= 10 else self.num_samples
         )
-        self.avail_samples.rotate(random.randint(1, max_rotation))
+        self.avail_samples.rotate(self.random.randint(1, max_rotation))
         samples = self.avail_samples.copy()
 
         row = (
