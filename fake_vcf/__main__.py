@@ -31,18 +31,19 @@ def main(
         help="Path to fake vcf file.",
     ),
     num_rows: int = typer.Option(
-        10, "--num_rows", help="Nr rows to generate (variants)"
+        10, "--num_rows", "-r", help="Nr rows to generate (variants)"
     ),
     num_samples: int = typer.Option(
-        10, "--num_samples", help="Nr of num_samples to generate."
+        10, "--num_samples", "-s", help="Nr of num_samples to generate."
     ),
     chromosome: str = typer.Option(
-        "chr1", "--chromosome", help="chromosome default chr1"
+        "chr1", "--chromosome", "-c", help="chromosome default chr1"
     ),
     seed: int = typer.Option(42, "--seed", help="Random seed to use"),
     sample_prefix: str = typer.Option(
         "S",
         "--sample_prefix",
+        "-p",
         help="Sample prefix ex: SAM =>  SAM0000001	SAM0000002",
     ),
     phased: bool = typer.Option(default=True, help="Simulate phased"),
