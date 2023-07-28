@@ -51,14 +51,44 @@ chr1	71	rs31	A	T	37	PASS	DP=10;AF=0.5;NS=2	GT	0|0	0|0
 
 ```
 
-You can write to a vcf file by piping the output:
+You can write to a vcf file by piping the output to a file:
 
 ```shell
 poetry run fake-vcf -s 2 -r 2 > fake_file.vcf
 ls -lah
 total 1
--rw-r--r--   1 b260-admin  staff   682B Jul 28 16:48 fake_file.vcf
+-rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
 ```
+
+Or let the script write to a file directly using `-o`:
+
+```shell
+poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf
+
+Writing to file fake_file.vcf
+(No compression)
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 50942.96it/s]
+Done, data written to fake_file.vcf
+ls -lah
+total 1
+-rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
+```
+
+And if you want the file gzipped add .gz to the file name:
+
+```shell
+poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf.gz
+
+Writing to file fake_file.vcf
+(No compression)
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 50942.96it/s]
+Done, data written to fake_file.vcf
+ls -lah
+total 2
+-rw-r--r--   1 magnus  staff   682B Jul 28 16:56 fake_file.vcf
+-rw-r--r--   1 magnus  staff   436B Jul 28 16:57 fake_file.vcf.gz
+```
+
 
 To see all options use --help
 
