@@ -37,6 +37,7 @@ python = "^3.10"
 
 typer = {extras = ["all"], version = "^0.9.0"}
 rich = "^13.4.2"
+tqdm = "^4.65.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.5"
