@@ -5,10 +5,12 @@ import pytest
 
 from fake_vcf.vcf_faker import VirtualVCF
 
+NR_NON_SAMPLE_COL = 9
+
 
 def get_vcf_data(
     virtual_vcf: VirtualVCF,
-) -> typing.Tuple[typing.List[str], typing.List[str]]:
+) -> typing.Tuple[typing.List[str], str]:
     with virtual_vcf as v_vcf:
         vcf_rows = list(v_vcf)
         data_rows = [r for r in vcf_rows if not r.startswith("##")]
@@ -60,10 +62,9 @@ def test_fake_vcf_sample_count(num_samples):
         phased=False,
     )
 
-    nr_non_sample_col = 9
     data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
     samples = data_rows[0].split("\t")
-    assert len(samples) - nr_non_sample_col == num_samples
+    assert len(samples) - NR_NON_SAMPLE_COL == num_samples
 
 
 @pytest.mark.parametrize(
@@ -90,7 +91,7 @@ def test_invalid_sample_count(num_samples):
         *[(r,) for r in range(-10, 1)],
     ],
 )
-def test_invalid_sample_count(num_rows):
+def test_invalid_row_count(num_rows):
     with pytest.raises(ValueError):
         VirtualVCF(
             num_rows=num_rows,
@@ -100,3 +101,32 @@ def test_invalid_sample_count(num_rows):
             random_seed=42,
             phased=False,
         )
+
+
+@pytest.mark.parametrize(
+    (
+        "num_samples",
+        "sample_prefix",
+        "expected",
+    ),
+    [
+        (1, "SAM", ["SAM0000001"]),
+        (2, "SAM", ["SAM0000001", "SAM0000002"]),
+        (3, "SAM", ["SAM0000001", "SAM0000002", "SAM0000003"]),
+        (9, "SAM", [f"SAM000000{i}" for i in range(1, 10)]),
+    ],
+)
+def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
+    virtual_vcf = VirtualVCF(
+        num_rows=10,
+        num_samples=num_samples,
+        chromosome="chr1",
+        sample_prefix=sample_prefix,
+        random_seed=42,
+        phased=False,
+    )
+
+    data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
+    header_row = metadata.split("\n")[-2]
+    sample_names = header_row.split("\t")[NR_NON_SAMPLE_COL:]
+    assert sample_names == expected
