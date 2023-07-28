@@ -39,6 +39,9 @@ class VirtualVCF:
             + "\n"
         )  # VCF file format header
 
+        if num_samples < 1 or num_rows < 1:
+            raise ValueError(f"Nr of samples and rows must be greater or equal to 1")
+
         if self.phased:
             self.sample_values = [
                 "0|0",
@@ -127,7 +130,10 @@ class VirtualVCF:
         fmt = "GT"
 
         # Generate random values for each sample by rotating the sample list randomly
-        self.avail_samples.rotate(random.randint(1, int(self.num_samples / 10)))
+        max_rotation = (
+            int(self.num_samples / 10) if self.num_samples >= 10 else self.num_samples
+        )
+        self.avail_samples.rotate(random.randint(1, max_rotation))
         samples = self.avail_samples.copy()
 
         row = (
