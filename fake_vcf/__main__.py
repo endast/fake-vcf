@@ -27,7 +27,7 @@ def main(
         None,
         "--fake_vcf_path",
         "-o",
-        help="Path to fake vcf file.",
+        help="Path to fake vcf file. If the path ends with .gz the file will be gzipped.",
     ),
     num_rows: int = typer.Option(
         10, "--num_rows", "-r", help="Nr rows to generate (variants)"
