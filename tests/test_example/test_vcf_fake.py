@@ -171,3 +171,20 @@ def test_fake_vcf_reproducibility():
     orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
     new_data = get_vcf_data(virtual_vcf=new_virtual_vcf)
     assert orig_data == new_data
+
+
+def test_fake_vcf_novel_data():
+    first_seed = 42
+    second_seed = 1337
+
+    orig_virtual_vcf = VirtualVCF(
+        num_rows=1, num_samples=1, random_seed=first_seed, chromosome="chr1"
+    )
+
+    new_virtual_vcf = VirtualVCF(
+        num_rows=1, num_samples=1, random_seed=second_seed, chromosome="chr1"
+    )
+
+    orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
+    new_data = get_vcf_data(virtual_vcf=new_virtual_vcf)
+    assert orig_data != new_data
