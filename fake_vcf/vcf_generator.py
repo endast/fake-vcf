@@ -32,7 +32,7 @@ def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int) -> 
     print(f"Done, data written to {fake_vcf_path}")
 
 
-def fake_vcf(
+def fake_vcf_data(
     fake_vcf_path, num_rows, num_samples, chromosome, seed, sample_prefix, phased
 ):
     virtual_vcf = VirtualVCF(

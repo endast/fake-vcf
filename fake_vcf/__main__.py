@@ -4,7 +4,7 @@ import typer
 from rich.console import Console
 
 from fake_vcf import version
-from fake_vcf.vcf_generator import fake_vcf
+from fake_vcf.vcf_generator import fake_vcf_data
 
 app = typer.Typer(
     name="fake-vcf",
@@ -55,7 +55,7 @@ def main(
         help="Prints the version of the fake-vcf package.",
     ),
 ) -> None:
-    fake_vcf(
+    fake_vcf_data(
         fake_vcf_path=fake_vcf_path,
         num_rows=num_rows,
         num_samples=num_samples,
