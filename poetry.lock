@@ -961,17 +961,17 @@ test = ["black (>=22.1.0)", "flake8 (>=4.0.1)", "pre-commit (>=2.17.0)", "tox (>
 
 [[package]]
 name = "pyupgrade"
-version = "3.9.0"
+version = "3.10.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "pyupgrade-3.9.0-py2.py3-none-any.whl", hash = "sha256:1807e324a1432f05a830bc1847095c90b604c91de66237fff55cb98b99d4da10"},
-    {file = "pyupgrade-3.9.0.tar.gz", hash = "sha256:a4c7132f4614f7acbacb756275c8a7881ad418f8a1c6ff6512c30dcf4c98f500"},
+    {file = "pyupgrade-3.10.1-py2.py3-none-any.whl", hash = "sha256:f565b4d26daa46ed522e98746834e77e444269103f8bc04413d77dad95169a24"},
+    {file = "pyupgrade-3.10.1.tar.gz", hash = "sha256:1d8d138c2ccdd3c42b1419230ae036d5607dc69465a26feacc069642fc8d1b90"},
 ]
 
 [package.dependencies]
-tokenize-rt = ">=3.2.0"
+tokenize-rt = ">=5.2.0"
 
 [[package]]
 name = "pyyaml"
@@ -1427,4 +1427,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "a31632631b12b2813621040b6370e334f0cc0dfbd8dec4f3c86dee4b0753b0b3"
+content-hash = "2ed55cac6ac9929a204f2f2eb707432af11153fb9396a0f79a3d0a80a80fffd3"
