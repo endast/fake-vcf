@@ -1,3 +1,5 @@
+from typing import Optional
+
 import random
 from collections import deque
 
@@ -11,7 +13,7 @@ class VirtualVCF:
         num_samples: int,
         chromosome: str,
         sample_prefix: str = "SAMPLES",
-        random_seed: int = 42,
+        random_seed: Optional[int] = None,
         phased: bool = True,
     ):
         self.num_rows = num_rows

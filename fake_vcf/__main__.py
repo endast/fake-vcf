@@ -38,7 +38,7 @@ def main(
     chromosome: str = typer.Option(
         "chr1", "--chromosome", "-c", help="chromosome default chr1"
     ),
-    seed: int = typer.Option(42, "--seed", help="Random seed to use"),
+    seed: int = typer.Option(None, "--seed", help="Random seed to use, default none."),
     sample_prefix: str = typer.Option(
         "S",
         "--sample_prefix",
