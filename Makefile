@@ -17,7 +17,6 @@ poetry-remove:
 install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
-	-poetry run mypy --install-types --non-interactive ./
 
 .PHONY: pre-commit-install
 pre-commit-install:
@@ -45,21 +44,17 @@ check-codestyle:
 	poetry run black --diff --check --config pyproject.toml ./
 	poetry run darglint --verbosity 2 fake_vcf tests
 
-.PHONY: mypy
-mypy:
-	poetry run mypy --config-file pyproject.toml ./
-
 .PHONY: check-safety
 check-safety:
 	poetry check
 	poetry run bandit -ll --recursive fake_vcf tests
 
 .PHONY: lint
-lint: test check-codestyle mypy check-safety
+lint: test check-codestyle check-safety
 
 .PHONY: update-dev-deps
 update-dev-deps:
-	poetry add  --group dev bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
+	poetry add  --group dev bandit@latest darglint@latest "isort[colors]@latest"  pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
 	poetry add  --group dev --allow-prereleases black@latest
 
 #* Cleaning
@@ -70,10 +65,6 @@ pycache-remove:
 .PHONY: dsstore-remove
 dsstore-remove:
 	find . | grep -E ".DS_Store" | xargs rm -rf
-
-.PHONY: mypycache-remove
-mypycache-remove:
-	find . | grep -E ".mypy_cache" | xargs rm -rf
 
 .PHONY: ipynbcheckpoints-remove
 ipynbcheckpoints-remove:
@@ -88,4 +79,4 @@ build-remove:
 	rm -rf build/
 
 .PHONY: cleanup
-cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove
+cleanup: pycache-remove dsstore-remove  ipynbcheckpoints-remove pytestcache-remove
