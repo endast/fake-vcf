@@ -41,7 +41,7 @@ tqdm = "^4.66.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.5"
-black = {version = "^23.7.0", allow-prereleases = true}
+black = {version = "^23.10.0", allow-prereleases = true}
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.12.0"}
 mypy = "^1.6.1"
@@ -70,7 +70,7 @@ coverage = "^7.3.2"
 coverage-badge = "^1.1.0"
 pytest-html = "^4.0.2"
 pytest-cov = "^4.1.0"
-black = {version = "^23.7.0", allow-prereleases = true}
+black = {version = "^23.10.0", allow-prereleases = true}
 safety = "^2.3.5"
 
 [tool.black]
