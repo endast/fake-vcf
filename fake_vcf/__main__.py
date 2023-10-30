@@ -46,6 +46,7 @@ def main(
         help="Sample prefix ex: SAM =>  SAM0000001	SAM0000002",
     ),
     phased: bool = typer.Option(default=True, help="Simulate phased"),
+    large_format: bool = typer.Option(default=True, help="Write large format vcf"),
     print_version: bool = typer.Option(
         None,
         "-v",
@@ -63,6 +64,7 @@ def main(
         seed=seed,
         sample_prefix=sample_prefix,
         phased=phased,
+        large_format=large_format,
     )
 
 

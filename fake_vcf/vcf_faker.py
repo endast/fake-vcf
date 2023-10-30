@@ -15,6 +15,7 @@ class VirtualVCF:
         sample_prefix: str = "SAMPLES",
         random_seed: Optional[int] = None,
         phased: bool = True,
+        large_format: bool = True,
     ):
         self.num_rows = num_rows
         self.rows_remaining = num_rows + 1  # One for the header
@@ -24,23 +25,32 @@ class VirtualVCF:
         self.phased = phased
         # Use a per instance seed for reproducibility
         self.random = random.Random(random_seed)
+        self.large_format = large_format
+        self.header = "\n".join(
+            [
+                "##fileformat=VCFv4.2",
+                f"##source=VCFake {version}",
+                '##FILTER=<ID=PASS,Description="All filters passed">',
+                '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
+                f"##contig=<ID={chromosome}>",
+                "##reference=ftp://ftp.example.com/sample.fa",
+                '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">',
+                '##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">',
+                '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+            ]
+        )  # VCF file format header
 
-        self.header = (
+        if self.large_format:
             "\n".join(
                 [
-                    "##fileformat=VCFv4.2",
-                    f"##source=VCFake {version}",
-                    '##FILTER=<ID=PASS,Description="All filters passed">',
-                    '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
-                    f"##contig=<ID={chromosome}>",
-                    "##reference=ftp://ftp.example.com/sample.fa",
-                    '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">',
-                    '##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">',
-                    '##FORMAT=<ID=GT,Number=1,Type=String,Description="Phased Genotype">',
+                    '##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
+                    '##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">',
+                    '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+                    '##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Phred-scaled genotype Likelihoods">',
                 ]
             )
-            + "\n"
-        )  # VCF file format header
+
+        self.header += "\n"
 
         if num_samples < 1 or num_rows < 1:
             raise ValueError(f"Nr of samples and rows must be greater or equal to 1")
@@ -68,6 +78,18 @@ class VirtualVCF:
                 num_samples * 10,
                 int(num_samples / 250),
                 int(num_samples / 300),
+            ]
+
+        if self.large_format:
+            extra_data = [
+                "0,30:30:89:913,89,0",
+                "0,10:10:49:413,33,0",
+                "0,20:20:55:489,89,0",
+                "0,40:00:66:726,85,0",
+            ]
+
+            self.sample_values = [
+                f"{sv}:{random.choice(extra_data)}" for sv in self.sample_values
             ]
 
         self.avail_samples = deque(

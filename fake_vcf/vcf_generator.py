@@ -33,7 +33,14 @@ def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int) -> 
 
 
 def fake_vcf_data(
-    fake_vcf_path, num_rows, num_samples, chromosome, seed, sample_prefix, phased
+    fake_vcf_path,
+    num_rows,
+    num_samples,
+    chromosome,
+    seed,
+    sample_prefix,
+    phased,
+    large_format,
 ):
     virtual_vcf = VirtualVCF(
         num_rows=num_rows,
@@ -42,6 +49,7 @@ def fake_vcf_data(
         sample_prefix=sample_prefix,
         random_seed=seed,
         phased=phased,
+        large_format=large_format,
     )
 
     if fake_vcf_path is None:
