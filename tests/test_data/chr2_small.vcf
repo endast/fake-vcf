@@ -1,0 +1,15 @@
+##fileformat=VCFv4.2
+##source=VCFake 0.1.0
+##FILTER=<ID=PASS,Description="All filters passed">
+##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
+##contig=<ID=chr2>
+##reference=ftp://ftp.example.com/sample.fa
+##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	S0000001	S0000002	S0000003	S0000004	S0000005
+chr2	99	rs38	C	A	64	PASS	DP=10;AF=0.5;NS=5	GT	0|0	0|0	0|0	0|0	0|0
+chr2	181	rs208	C	T	20	PASS	DP=10;AF=0.5;NS=5	GT	0|0	0|0	0|0	0|0	0|0
+chr2	266	rs630	C	T	40	PASS	DP=10;AF=0.5;NS=5	GT	0|0	0|0	0|0	0|0	0|0
+chr2	269	rs813	A	T	81	PASS	DP=10;AF=0.5;NS=5	GT	0|0	0|0	0|0	0|0	0|0
+chr2	372	rs228	C	T	55	PASS	DP=10;AF=0.5;NS=5	GT	0|0	0|0	0|0	0|0	0|0
