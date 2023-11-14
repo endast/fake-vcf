@@ -16,15 +16,22 @@ test_file_parent = Path(__file__).resolve().parent
 
 def vcf_validator():
     vcf_validator_path = test_file_parent / "../../vcf_validator/vcf_validator"
-    base_url = "https://github.com/EBIvariation/vcf-validator/releases/download/v0.9.4"
-    dl_urls = {
-        "Linux": f"{base_url}/vcf_validator_linux",
-        "Darwin": f"{base_url}/vcf_validator_macos",
-        "Windows": f"{base_url}/vcf_validator.exe",
-    }
     system_platform = platform.system()
     if not vcf_validator_path.exists():
-        urlretrieve(dl_urls[system_platform], vcf_validator_path)
+        base_url = (
+            "https://github.com/EBIvariation/vcf-validator/releases/download/v0.9.4"
+        )
+
+        dl_urls = {
+            "Linux": f"vcf_validator_linux",
+            "Darwin": f"vcf_validator_macos",
+            "Windows": f"vcf_validator.exe",
+        }
+        vcf_validiator_dl_url = f"{base_url}/{dl_urls[system_platform]}"
+
+        urlretrieve(
+            vcf_validiator_dl_url, vcf_validator_path
+        )  # nosec CWE-22 should not be a problem
         vcf_validator_path.chmod(vcf_validator_path.stat().st_mode | stat.S_IEXEC)
 
     return vcf_validator_path
