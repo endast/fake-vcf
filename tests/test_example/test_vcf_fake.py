@@ -95,7 +95,7 @@ def test_invalid_row_count(num_rows):
     with pytest.raises(ValueError):
         VirtualVCF(
             num_rows=num_rows,
-            num_samples=1,
+            num_samples=10,
             chromosome="chr1",
             sample_prefix="S",
             random_seed=42,
@@ -144,8 +144,8 @@ def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
 )
 def test_fake_vcf_chromosome(chromosome):
     virtual_vcf = VirtualVCF(
-        num_rows=1,
-        num_samples=1,
+        num_rows=10,
+        num_samples=10,
         chromosome=chromosome,
         sample_prefix="S",
         random_seed=42,
@@ -161,11 +161,11 @@ def test_fake_vcf_reproducibility():
     seed_value = 42
 
     orig_virtual_vcf = VirtualVCF(
-        num_rows=1, num_samples=1, random_seed=seed_value, chromosome="chr1"
+        num_rows=10, num_samples=10, random_seed=seed_value, chromosome="chr1"
     )
 
     new_virtual_vcf = VirtualVCF(
-        num_rows=1, num_samples=1, random_seed=seed_value, chromosome="chr1"
+        num_rows=10, num_samples=10, random_seed=seed_value, chromosome="chr1"
     )
 
     orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
@@ -178,11 +178,11 @@ def test_fake_vcf_novel_data():
     second_seed = 1337
 
     orig_virtual_vcf = VirtualVCF(
-        num_rows=1, num_samples=1, random_seed=first_seed, chromosome="chr1"
+        num_rows=10, num_samples=10, random_seed=first_seed, chromosome="chr1"
     )
 
     new_virtual_vcf = VirtualVCF(
-        num_rows=1, num_samples=1, random_seed=second_seed, chromosome="chr1"
+        num_rows=10, num_samples=10, random_seed=second_seed, chromosome="chr1"
     )
 
     orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
