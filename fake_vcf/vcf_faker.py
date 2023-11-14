@@ -89,7 +89,7 @@ class VirtualVCF:
             ]
 
             self.sample_values = [
-                f"{sv}:{random.choice(extra_data)}" for sv in self.sample_values
+                f"{sv}:{self.random.choice(extra_data)}" for sv in self.sample_values
             ]
 
         self.avail_samples = deque(
