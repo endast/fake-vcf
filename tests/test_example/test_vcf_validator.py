@@ -67,7 +67,6 @@ def run_vcf_validator(vcf_file_path, result_path):
     ),
 )
 def test_vcf_file_validation(cli_args: tuple, tmp_path):
-    vcf_file_path = tmp_path / "example.vcf"
     args = []
     for cli_arg in cli_args:
         if type(cli_arg) is list:
@@ -75,6 +74,7 @@ def test_vcf_file_validation(cli_args: tuple, tmp_path):
         else:
             args += [cli_arg]
 
+    vcf_file_path = tmp_path / f"example_{'_'.join(args)}.vcf"
     args += ["-o", vcf_file_path]
 
     runner.invoke(app, args=args)
