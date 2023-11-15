@@ -37,20 +37,20 @@ class VirtualVCF:
                 '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">',
                 '##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">',
                 '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+                "",
             ]
         )  # VCF file format header
 
         if self.large_format:
-            "\n".join(
+            self.header += "\n".join(
                 [
                     '##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
                     '##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">',
                     '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
                     '##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Phred-scaled genotype Likelihoods">',
+                    "",
                 ]
             )
-
-        self.header += "\n"
 
         if num_samples < 1 or num_rows < 1:
             raise ValueError(f"Nr of samples and rows must be greater or equal to 1")
@@ -154,7 +154,10 @@ class VirtualVCF:
         qual = f"{self.random.randint(10, 100)}"
         filt = self.random.choice(["PASS"])
         info = f"DP=10;AF=0.5;NS={self.num_samples}"
-        fmt = "GT"
+        if self.large_format:
+            fmt = "GT:AD:DP:GQ:PL"
+        else:
+            fmt = "GT"
 
         # Generate random values for each sample by rotating the sample list randomly
         max_rotation = (

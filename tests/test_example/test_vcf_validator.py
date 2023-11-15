@@ -57,6 +57,7 @@ def run_vcf_validator(vcf_file_path, result_path):
         (["-r", "10", "--no-large-format"],),
         (["-r", "50", "--no-large-format"],),
         (["-r", "100", "--no-large-format"],),
+        (["-r", "10", "--large-format"],),
     ],
 )
 def test_vcf_file_validation(cli_args: list, tmp_path):
