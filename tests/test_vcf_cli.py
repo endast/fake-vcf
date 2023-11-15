@@ -3,7 +3,7 @@ from typer.testing import CliRunner
 
 from fake_vcf import version
 from fake_vcf.__main__ import app
-from tests.test_example.test_vcf_fake import NR_NON_SAMPLE_COL
+from tests.test_vcf_fake import NR_NON_SAMPLE_COL
 
 runner = CliRunner()
 
