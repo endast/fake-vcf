@@ -72,6 +72,7 @@ pytest-html = "^4.1.1"
 pytest-cov = "^4.1.0"
 black = {version = "^23.11.0", allow-prereleases = true}
 safety = "^2.3.5"
+pytest-xdist = "^3.4.0"
 
 [tool.black]
 # https://github.com/psf/black

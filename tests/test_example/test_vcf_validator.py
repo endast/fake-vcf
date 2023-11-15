@@ -1,3 +1,4 @@
+import itertools
 import platform
 import stat
 import subprocess
@@ -52,17 +53,30 @@ def run_vcf_validator(vcf_file_path, result_path):
 
 
 @pytest.mark.parametrize(
-    ("cli_args",),
-    [
-        (["-r", "10", "--no-large-format"],),
-        (["-r", "50", "--no-large-format"],),
-        (["-r", "100", "--no-large-format"],),
-        (["-r", "10", "--large-format"],),
-    ],
+    "cli_args",
+    list(
+        itertools.product(
+            *[
+                [["-r", f"{r}"] for r in range(1, 100, 25)],
+                [["-s", f"{s}"] for s in range(1, 100, 25)],
+                ["--large-format", "--no-large-format"],
+                ["--phased", "--no-phased"],
+                [[f"-c", f"chr{c}"] for c in range(1, 23)],
+            ]
+        )
+    ),
 )
-def test_vcf_file_validation(cli_args: list, tmp_path):
+def test_vcf_file_validation(cli_args: tuple, tmp_path):
     vcf_file_path = tmp_path / "example.vcf"
-    args = cli_args + ["-o", vcf_file_path]
+    args = []
+    for cli_arg in cli_args:
+        if type(cli_arg) is list:
+            args += cli_arg
+        else:
+            args += [cli_arg]
+
+    args += ["-o", vcf_file_path]
+
     runner.invoke(app, args=args)
 
     validator_status, validation_result = run_vcf_validator(
