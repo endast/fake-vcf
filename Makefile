@@ -40,7 +40,7 @@ test:
 
 #* Linting
 .PHONY: test-xdist
-test:
+test-xdist:
 	PYTHONPATH=$(PYTHONPATH) poetry run pytest -n auto -c pyproject.toml --cov-report=html --cov=fake_vcf tests/
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
