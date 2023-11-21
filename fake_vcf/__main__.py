@@ -15,7 +15,12 @@ console = Console()
 
 
 def version_callback(print_version: bool) -> None:
-    """Print the version of the package."""
+    """
+    Callback function to print the version of the package.
+
+    Args:
+        print_version (bool): Flag to print the version.
+    """
     if print_version:
         console.print(f"[yellow]fake-vcf[/] version: [bold blue]{version}[/]")
         raise typer.Exit()
@@ -56,6 +61,20 @@ def main(
         help="Prints the version of the fake-vcf package.",
     ),
 ) -> None:
+    """
+    Main function to generate fake VCF data using Typer CLI.
+
+    Args:
+        fake_vcf_path (Path): Path to fake VCF file or None to write to standard output.
+        num_rows (int): Number of rows.
+        num_samples (int): Number of samples.
+        chromosome (str): Chromosome identifier.
+        seed (int): Random seed for reproducibility.
+        sample_prefix (str): Prefix for sample names.
+        phased (bool): Simulate phased genotypes.
+        large_format (bool): Write large format VCF.
+        print_version (bool): Flag to print the version of the fake-vcf package.
+    """
     fake_vcf_data(
         fake_vcf_path=fake_vcf_path,
         num_rows=num_rows,

@@ -17,6 +17,18 @@ class VirtualVCF:
         phased: bool = True,
         large_format: bool = True,
     ):
+        """
+        Initialize VirtualVCF object.
+
+        Args:
+            num_rows (int): Number of rows.
+            num_samples (int): Number of samples.
+            chromosome (str): Chromosome identifier.
+            sample_prefix (str, optional): Prefix for sample names. Defaults to "SAMPLES".
+            random_seed (int, optional): Random seed for reproducibility. Defaults to None.
+            phased (bool, optional): Phased or unphased genotypes. Defaults to True.
+            large_format (bool, optional): Use large format VCF. Defaults to True.
+        """
         self.num_rows = num_rows
         self.rows_remaining = num_rows + 1  # One for the header
         self.num_samples = num_samples
@@ -111,9 +123,15 @@ class VirtualVCF:
         self.current_pos = 0
 
     def __iter__(self):
+        """
+        Iterates over VirtualVCF object.
+        """
         return self
 
     def __next__(self):
+        """
+        Retrieves the next VCF data.
+        """
         if self.rows_remaining <= 0:
             raise StopIteration
         vcf_data = self._generate_vcf_data()
@@ -121,6 +139,9 @@ class VirtualVCF:
         return vcf_data
 
     def _generate_vcf_header(self):
+        """
+        Generates the VCF header.
+        """
         # Create a list of column names
         columns = [
             "#CHROM",
@@ -143,6 +164,9 @@ class VirtualVCF:
         return self.header
 
     def _generate_vcf_row(self):
+        """
+        Generates a VCF row.
+        """
         ref_index = self.random.randint(0, 3)
 
         position = self.positions[self.current_pos]
@@ -177,6 +201,9 @@ class VirtualVCF:
         return row
 
     def _generate_vcf_data(self):
+        """
+        Generates VCF data.
+        """
         if self.rows_remaining == self.num_rows + 1:
             vcf_row = self._generate_vcf_header()
         else:
@@ -184,7 +211,14 @@ class VirtualVCF:
         return vcf_row
 
     def __enter__(self):
+        """
+        Enters the context.
+        """
+
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Exits the context.
+        """
         pass
