@@ -5,9 +5,6 @@
 
 Welcome to fake-vcf's documentation!
 ====================================
-.. automodule:: fake_vcf
-    :members:
-
 
 .. toctree::
    :maxdepth: 2
