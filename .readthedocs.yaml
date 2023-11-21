@@ -16,7 +16,6 @@ sphinx:
    fail_on_warning: true
 
 formats:
-   - pdf
    - epub
 
 # Optional but recommended, declare the Python requirements required
