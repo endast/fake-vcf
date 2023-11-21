@@ -5,7 +5,7 @@
 
 Welcome to fake-vcf's documentation!
 ====================================
-.. automodule:: fake_vcf.main
+.. automodule:: fake_vcf
     :members:
 
 
