@@ -7,11 +7,10 @@ Welcome to fake-vcf's documentation!
 ====================================
 
 .. toctree::
+   usage
+   api
    :maxdepth: 2
    :caption: Contents:
-     usage
-     api
-
 
 .. note::
 
