@@ -9,8 +9,15 @@ Welcome to fake-vcf's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+     usage
+     api
 
 
+.. note::
+
+   This project is under active development.
+
+Contents
 
 Indices and tables
 ==================
