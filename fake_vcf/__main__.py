@@ -20,6 +20,9 @@ def version_callback(print_version: bool) -> None:
 
     Args:
         print_version (bool): Flag to print the version.
+
+    Raises:
+        Exit: If the print_version flag is set.
     """
     if print_version:
         console.print(f"[yellow]fake-vcf[/] version: [bold blue]{version}[/]")

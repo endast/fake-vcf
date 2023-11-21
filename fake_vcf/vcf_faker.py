@@ -12,10 +12,10 @@ class VirtualVCF:
         num_rows: int,
         num_samples: int,
         chromosome: str,
-        sample_prefix: str = "SAMPLES",
+        sample_prefix: Optional[str] = "SAMPLES",
         random_seed: Optional[int] = None,
-        phased: bool = True,
-        large_format: bool = True,
+        phased: Optional[bool] = True,
+        large_format: Optional[bool] = True,
     ):
         """
         Initialize VirtualVCF object.
@@ -28,6 +28,9 @@ class VirtualVCF:
             random_seed (int, optional): Random seed for reproducibility. Defaults to None.
             phased (bool, optional): Phased or unphased genotypes. Defaults to True.
             large_format (bool, optional): Use large format VCF. Defaults to True.
+
+        Raises:
+            ValueError: If num_samples or num_rows is less than 1.
         """
         self.num_rows = num_rows
         self.rows_remaining = num_rows + 1  # One for the header
