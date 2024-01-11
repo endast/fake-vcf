@@ -35,13 +35,13 @@ formatting: codestyle
 #* Linting
 .PHONY: test
 test:
-	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=fake_vcf tests/
+	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --random-order --cov-report=html --cov=fake_vcf tests/
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
 #* Linting
 .PHONY: test-xdist
 test-xdist:
-	PYTHONPATH=$(PYTHONPATH) poetry run pytest -n auto -c pyproject.toml --cov-report=html --cov=fake_vcf tests/
+	PYTHONPATH=$(PYTHONPATH) poetry run pytest -n auto --random-order -c pyproject.toml --cov-report=html --cov=fake_vcf tests/
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
 
