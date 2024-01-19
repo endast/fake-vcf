@@ -71,7 +71,7 @@ coverage-badge = "^1.1.0"
 pytest-html = "^4.1.1"
 pytest-cov = "^4.1.0"
 black = "^23.12.1"
-safety = "^3.0.0a2"
+safety = "^3.0.0"
 pytest-xdist = "^3.4.0"
 pytest-random-order = "^1.1.0"
 
