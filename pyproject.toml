@@ -73,7 +73,7 @@ pytest-cov = "^4.1.0"
 black = "^23.12.1"
 safety = "^3.0.1"
 pytest-xdist = "^3.4.0"
-pytest-random-order = "^1.1.0"
+pytest-random-order = "^1.1.1"
 
 [tool.black]
 # https://github.com/psf/black
