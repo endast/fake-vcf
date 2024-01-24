@@ -40,7 +40,7 @@ rich = "^13.7.0"
 tqdm = "^4.66.0"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7.6"
+bandit = "^1.7.7"
 black = {version = "^23.12.1", allow-prereleases = false}
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.13.2"}
@@ -57,7 +57,7 @@ pytest-html = "^4.0.2"
 pytest-cov = "^4.1.0"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "^1.7.6"
+bandit = "^1.7.7"
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.13.2"}
 mypy = "^1.8.0"
