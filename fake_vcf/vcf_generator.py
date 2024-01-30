@@ -1,4 +1,3 @@
-import gzip
 import sys
 from pathlib import Path
 
@@ -32,6 +31,12 @@ def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int) -> 
 
     if fake_vcf_path.suffix == ".gz":
         print("(Using compression)")
+        try:
+            from Bio import bgzf as gzip
+        except ImportError:
+            print("Biopython not installed, falling back to gzip instead of bgzip")
+            import gzip
+
         with gzip.open(fake_vcf_path, "wt") as gz_file, virtual_vcf as v_vcf:
             for line in tqdm.tqdm(v_vcf, total=num_rows + 1):
                 gz_file.write(line)

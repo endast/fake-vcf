@@ -18,6 +18,12 @@ install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
 
+#* Installation
+.PHONY: install-all
+install-all:
+	poetry lock -n && poetry export --without-hashes > requirements.txt
+	poetry install -n --with bgzip
+
 .PHONY: pre-commit-install
 pre-commit-install:
 	poetry run pre-commit install

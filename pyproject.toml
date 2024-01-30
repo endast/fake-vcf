@@ -73,6 +73,13 @@ safety = "^3.0.1"
 pytest-xdist = "^3.4.0"
 pytest-random-order = "^1.1.1"
 
+[tool.poetry.group.bgzip]
+optional = true
+
+[tool.poetry.group.bgzip.dependencies]
+biopython = "^1.83"
+
+
 [tool.black]
 # https://github.com/psf/black
 target-version = ["py38"]
