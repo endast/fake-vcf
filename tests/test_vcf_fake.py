@@ -1,4 +1,5 @@
 """Tests for fake-vcf"""
+
 import typing
 
 import pytest
