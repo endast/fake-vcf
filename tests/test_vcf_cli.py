@@ -8,6 +8,11 @@ from tests.test_vcf_fake import NR_NON_SAMPLE_COL
 runner = CliRunner()
 
 
+def is_gz_file(filepath):
+    with open(filepath, "rb") as test_f:
+        return test_f.read(2) == b"\x1f\x8b"
+
+
 def test_app_no_input():
     result = runner.invoke(app, [])
     assert result.exit_code == 0
@@ -20,6 +25,7 @@ def test_app_no_compression_output(tmp_path):
     assert result.exit_code == 0
     assert output_file.exists()
     assert "No compression" in result.stdout
+    assert not is_gz_file(output_file)
 
 
 def test_app_compression(tmp_path):
@@ -28,6 +34,7 @@ def test_app_compression(tmp_path):
     assert result.exit_code == 0
     assert output_file.exists()
     assert "Using compression" in result.stdout
+    assert is_gz_file(output_file)
 
 
 def test_app_seed_same(tmp_path):

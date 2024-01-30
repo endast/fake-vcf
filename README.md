@@ -32,6 +32,16 @@ make poetry-download
 make install
 ```
 
+If you want to write bgzip files instead gzip when writing compressed gzip files use `make install-all`. This
+install the optional dependencies. 
+```shell
+git clone https://github.com/endast/fake-vcf.git
+cd fake-vcf
+make poetry-download
+make install-all
+```
+
+
 ### Run
 
 By default `fake-vcf` writes to stdout
@@ -76,7 +86,8 @@ total 1
 -rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
 ```
 
-And if you want the file gzipped add .gz to the file name:
+And if you want the file compressed add .gz to the file name:
+(if you installed using `install-all` the file will be compressde using bgzip, otherwise using gzip).
 
 ```shell
 poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf.gz
@@ -91,6 +102,13 @@ total 2
 -rw-r--r--   1 magnus  staff   436B Jul 28 16:57 fake_file.vcf.gz
 ```
 
+You can also pipe the output to bgzip (or gzip) to compress it.
+```shell
+poetry run fake-vcf -s 2 -r 2 | bgzip > fake_file.vcf.gz
+ls -lah
+total 1
+-rw-r--r--   1 magnus  staff     716 Jan 30 13:38 bgzip.chr.vcf.gz
+```
 
 To see all options use --help
 
@@ -112,32 +130,6 @@ poetry run fake-vcf --help
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-## 📈 Releases
-
-You can see the list of available releases on the [GitHub Releases](https://github.com/endast/fake-vcf/releases) page.
-
-We follow [Semantic Versions](https://semver.org/) specification.
-
-We use [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). As pull requests are merged, a draft
-release is kept up-to-date listing the changes, ready to publish when you’re ready. With the categories option, you can
-categorize pull requests in release notes using labels.
-
-### List of labels and corresponding titles
-
-|               **Label**               |  **Title in Releases**  |
-|:-------------------------------------:|:-----------------------:|
-|       `enhancement`, `feature`        |       🚀 Features       |
-| `bug`, `refactoring`, `bugfix`, `fix` | 🔧 Fixes & Refactoring  |
-|       `build`, `ci`, `testing`        | 📦 Build System & CI/CD |
-|              `breaking`               |   💥 Breaking Changes   |
-|            `documentation`            |    📝 Documentation     |
-|            `dependencies`             | ⬆️ Dependencies updates |
-
-You can update it
-in [`release-drafter.yml`](https://github.com/endast/fake-vcf/blob/main/.github/release-drafter.yml).
-
-GitHub creates the `bug`, `enhancement`, and `documentation` labels for you. Dependabot creates the `dependencies`
-label. Create the remaining labels on the Issues tab of your GitHub repository, when you need them.
 
 ## 🛡 License
 
