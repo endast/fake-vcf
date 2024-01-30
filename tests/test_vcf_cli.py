@@ -13,6 +13,15 @@ def is_gz_file(filepath):
         return test_f.read(2) == b"\x1f\x8b"
 
 
+def is_bgzip_compressed(file_path):
+    with open(file_path, "rb") as file:
+        # Read the first three bytes from the file
+        magic_bytes = file.read(3)
+
+    # Check if the magic bytes indicate bgzip compression
+    return magic_bytes == b"\x1F\x8B\x08"
+
+
 def test_app_no_input():
     result = runner.invoke(app, [])
     assert result.exit_code == 0
@@ -25,7 +34,13 @@ def test_app_no_compression_output(tmp_path):
     assert result.exit_code == 0
     assert output_file.exists()
     assert "No compression" in result.stdout
-    assert not is_gz_file(output_file)
+
+    try:
+        import Bio.bzip
+
+        assert not is_bgzip_compressed(file_path)
+    except:
+        assert not is_gz_file(output_file)
 
 
 def test_app_compression(tmp_path):
@@ -34,7 +49,14 @@ def test_app_compression(tmp_path):
     assert result.exit_code == 0
     assert output_file.exists()
     assert "Using compression" in result.stdout
-    assert is_gz_file(output_file)
+
+    # If biopython is installed check that we wrote a bgzip file
+    try:
+        import Bio.bzip
+
+        assert is_bgzip_compressed(output_file)
+    except:
+        assert is_gz_file(output_file)
 
 
 def test_app_seed_same(tmp_path):
