@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install black==23.12.1
+      - run: pip install black==24.1.1
       - run: black --check .
       - name: If needed, commit black changes to the pull request
         if: failure()
