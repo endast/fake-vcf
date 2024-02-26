@@ -36,10 +36,8 @@ def test_app_no_compression_output(tmp_path):
     assert "No compression" in result.stdout
 
     try:
-        import Bio.bzip
-
-        assert not is_bgzip_compressed(file_path)
-    except:
+        assert not is_bgzip_compressed(output_file)
+    except AssertionError:
         assert not is_gz_file(output_file)
 
 
@@ -52,10 +50,8 @@ def test_app_compression(tmp_path):
 
     # If biopython is installed check that we wrote a bgzip file
     try:
-        import Bio.bzip
-
         assert is_bgzip_compressed(output_file)
-    except:
+    except AssertionError:
         assert is_gz_file(output_file)
 
 
