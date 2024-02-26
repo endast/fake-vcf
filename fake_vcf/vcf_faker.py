@@ -68,7 +68,7 @@ class VirtualVCF:
             )
 
         if num_samples < 1 or num_rows < 1:
-            raise ValueError(f"Nr of samples and rows must be greater or equal to 1")
+            raise ValueError("Nr of samples and rows must be greater or equal to 1")
 
         if self.phased:
             self.sample_values = [

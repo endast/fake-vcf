@@ -24,9 +24,9 @@ def vcf_validator():
         )
 
         dl_urls = {
-            "Linux": f"vcf_validator_linux",
-            "Darwin": f"vcf_validator_macos",
-            "Windows": f"vcf_validator.exe",
+            "Linux": "vcf_validator_linux",
+            "Darwin": "vcf_validator_macos",
+            "Windows": "vcf_validator.exe",
         }
         vcf_validiator_dl_url = f"{base_url}/{dl_urls[system_platform]}"
 
@@ -39,7 +39,7 @@ def vcf_validator():
 
 
 def run_vcf_validator(vcf_file_path, result_path):
-    args = ["-r", "text", "-i", f"{vcf_file_path}", f"-o", f"{result_path}"]
+    args = ["-r", "text", "-i", f"{vcf_file_path}", "-o", f"{result_path}"]
     vcf_validator_path = vcf_validator()
     cmd = [vcf_validator_path] + args
 
@@ -61,7 +61,7 @@ def run_vcf_validator(vcf_file_path, result_path):
                 [["-s", f"{s}"] for s in range(1, 100, 25)],
                 ["--large-format", "--no-large-format"],
                 ["--phased", "--no-phased"],
-                [[f"-c", f"chr{c}"] for c in range(1, 23)],
+                [["-c", f"chr{c}"] for c in range(1, 23)],
             ]
         )
     ),
@@ -69,7 +69,7 @@ def run_vcf_validator(vcf_file_path, result_path):
 def test_vcf_file_validation(cli_args: tuple, tmp_path):
     args = []
     for cli_arg in cli_args:
-        if type(cli_arg) is list:
+        if type(cli_arg).isinstance(list):
             args += cli_arg
         else:
             args += [cli_arg]
