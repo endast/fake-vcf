@@ -69,7 +69,7 @@ def run_vcf_validator(vcf_file_path, result_path):
 def test_vcf_file_validation(cli_args: tuple, tmp_path):
     args = []
     for cli_arg in cli_args:
-        if type(cli_arg).isinstance(list):
+        if isinstance(cli_arg, list):
             args += cli_arg
         else:
             args += [cli_arg]
