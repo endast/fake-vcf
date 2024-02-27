@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 def parse_fasta(file_path, include_sequences):
     sequences = []
-    include_sequences = set(include_sequences)
+    include_sequences = set(include_sequences) if include_sequences else set()
     with open(file_path) as fasta_file:
         current_sequence = {"id": "", "sequence": []}
 
