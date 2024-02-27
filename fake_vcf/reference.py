@@ -37,7 +37,6 @@ def parse_fasta(file_path, include_sequences):
 
 
 def main():
-
     script_dir = Path(__file__).resolve().parent
     file_path = script_dir / ("../tests/test_data/reference/reference_small.fa")
 
@@ -57,7 +56,7 @@ def main():
         )
         pq.write_table(table_chr, parquet_file, compression="zstd")
 
-    print("DONE!")
+    print("\nDONE!")
 
 
 if __name__ == "__main__":
