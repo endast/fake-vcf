@@ -24,9 +24,8 @@ def parse_fasta(file_path, include_sequences):
                 ):
                     sequences.append(current_sequence.copy())
 
-                current_sequence = {"id": "", "sequence": []}
+                current_sequence = {"id": line[1:].split(" ")[0], "sequence": []}
 
-                current_sequence["id"] = line[1:].split(" ")[0]
             elif current_sequence["id"] in include_sequences:
                 current_sequence["sequence"].extend(line.upper())
 
@@ -37,20 +36,29 @@ def parse_fasta(file_path, include_sequences):
     return sequences
 
 
-include_sequences = [f"chr{c}" for c in range(1, 23)]
-print(f"Getting sequences from {file_path}\n including {include_sequences}")
-parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
+def main():
 
-# TODO Write every sequence in loop?
-print(f"\nWriting {len(parsed_sequences)} sequences to parquet\n")
-for parsed_sequence in (pbar := tqdm(parsed_sequences)):
-    pbar.set_description(f"Processing {parsed_sequence['id']}")
+    script_dir = Path(__file__).resolve().parent
+    file_path = script_dir / ("../tests/test_data/reference/reference_small.fa")
 
-    parquet_file = Path(f"/fasta_{parsed_sequence['id']}.parquet")
-    table_chr = pa.Table.from_arrays(
-        [pa.array(parsed_sequence["sequence"], pa.string())],
-        names=[parsed_sequence["id"]],
-    )
-    pq.write_table(table_chr, parquet_file, compression="zstd")
+    include_sequences = [f"chr{c}" for c in range(1, 23)]
+    print(f"Getting sequences from {file_path}\n including {include_sequences}")
+    parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
 
-print("DONE!")
+    # TODO Write every sequence in loop?
+    print(f"\nWriting {len(parsed_sequences)} sequences to parquet\n")
+    for parsed_sequence in (pbar := tqdm(parsed_sequences)):
+        pbar.set_description(f"Processing {parsed_sequence['id']}")
+
+        parquet_file = Path(f"fasta_{parsed_sequence['id']}.parquet")
+        table_chr = pa.Table.from_arrays(
+            [pa.array(parsed_sequence["sequence"], pa.string())],
+            names=[parsed_sequence["id"]],
+        )
+        pq.write_table(table_chr, parquet_file, compression="zstd")
+
+    print("DONE!")
+
+
+if __name__ == "__main__":
+    main()
