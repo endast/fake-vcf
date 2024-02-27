@@ -49,7 +49,9 @@ def main():
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
 
-        parquet_file = Path(f"fasta_{parsed_sequence['id']}.parquet")
+        parquet_file = (
+            script_dir / "../reference_fasta" / f"fasta_{parsed_sequence['id']}.parquet"
+        )
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],
             names=[parsed_sequence["id"]],
