@@ -2,6 +2,7 @@ from typing import Optional
 
 import random
 from collections import deque
+from pathlib import Path
 
 from fake_vcf import version
 
@@ -16,6 +17,7 @@ class VirtualVCF:
         random_seed: Optional[int] = None,
         phased: Optional[bool] = True,
         large_format: Optional[bool] = True,
+        reference_file: Optional[str] = None,
     ):
         """
         Initialize VirtualVCF object.
@@ -41,6 +43,7 @@ class VirtualVCF:
         # Use a per instance seed for reproducibility
         self.random = random.Random(random_seed)
         self.large_format = large_format
+        self.referene_file = Path(reference_file) if reference_file else None
         self.header = "\n".join(
             [
                 "##fileformat=VCFv4.2",

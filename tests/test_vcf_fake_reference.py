@@ -42,9 +42,9 @@ def test_parse_sequences(include_sequences, fasta_file):
 @pytest.mark.parametrize(
     "sequence_id, fasta_file, expected_sequence_sum",
     (
-        (f"chr1", test_data_dir / "reference/reference_small.fa", 77573),
-        (f"chr2", test_data_dir / "reference/reference_small.fa", 95119),
-        (f"chr5", test_data_dir / "reference/reference_small.fa", 129915),
+        ("chr1", test_data_dir / "reference/reference_small.fa", 77573),
+        ("chr2", test_data_dir / "reference/reference_small.fa", 95119),
+        ("chr5", test_data_dir / "reference/reference_small.fa", 129915),
     ),
 )
 def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_sum):
