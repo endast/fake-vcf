@@ -69,6 +69,16 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
         ("fasta_chr1.parquet", 460, "T"),
         ("fasta_chr1.parquet", 500, "C"),
         ("fasta_chr1.parquet", 1000, "G"),
+        ("fasta_chr2.parquet", 0, "N"),
+        ("fasta_chr2.parquet", 10, "N"),
+        ("fasta_chr2.parquet", 20, "N"),
+        ("fasta_chr2.parquet", 25, "N"),
+        ("fasta_chr2.parquet", 46, "N"),
+        ("fasta_chr2.parquet", 50, "N"),
+        ("fasta_chr2.parquet", 100, "A"),
+        ("fasta_chr2.parquet", 460, "C"),
+        ("fasta_chr2.parquet", 500, "T"),
+        ("fasta_chr2.parquet", 1000, "T"),
     ),
 )
 def test_reading_reference_parquet_files(
