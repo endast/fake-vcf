@@ -30,7 +30,8 @@ class VirtualVCF:
             random_seed (int, optional): Random seed for reproducibility. Defaults to None.
             phased (bool, optional): Phased or unphased genotypes. Defaults to True.
             large_format (bool, optional): Use large format VCF. Defaults to True.
-            reference_file (str|Path, optional): path to reference file
+            reference_file (str or Path, optional): Path to reference file.
+
         Raises:
             ValueError: If num_samples or num_rows is less than 1.
         """
