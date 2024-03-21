@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-import fake_vcf.reference as refrence
+import fake_vcf.reference as reference
 from fake_vcf.vcf_faker import VirtualVCF
 from tests.test_vcf_fake import get_vcf_data
 
@@ -29,7 +29,7 @@ test_data_dir = Path(__file__).resolve().parent / "test_data"
 )
 def test_parse_sequences(include_sequences, fasta_file):
     fasta_file = test_data_dir / "reference/reference_small.fa"
-    sequences = refrence.parse_fasta(
+    sequences = reference.parse_fasta(
         include_sequences=include_sequences, file_path=fasta_file
     )
 
@@ -51,7 +51,7 @@ def test_parse_sequences(include_sequences, fasta_file):
 )
 def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_sum):
     fasta_file = test_data_dir / "reference/reference_small.fa"
-    sequences = refrence.parse_fasta(
+    sequences = reference.parse_fasta(
         include_sequences=[sequence_id], file_path=fasta_file
     )
     assert sum([ord(s) for s in sequences[0]["sequence"]]) == expected_sequence_sum
@@ -85,8 +85,8 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
 def test_reading_reference_parquet_files(chrom, position, expected_reference_value):
     reference_dir = test_data_dir / "reference/parquet"
     reference_file = reference_dir / f"fasta_{chrom}.parquet"
-    reference_data = refrence.load_reference_data(reference_file, memory_map=False)
-    reference_value = refrence.get_ref_at_pos(
+    reference_data = reference.load_reference_data(reference_file, memory_map=False)
+    reference_value = reference.get_ref_at_pos(
         ref_data=reference_data, position=position
     )
 
@@ -125,8 +125,8 @@ def test_reading_reference_parquet_files_with_memory_map(
 ):
     reference_dir = test_data_dir / "reference/parquet"
     reference_file = reference_dir / f"fasta_{chrom}.parquet"
-    reference_data = refrence.load_reference_data(reference_file, memory_map=False)
-    reference_value = refrence.get_ref_at_pos(
+    reference_data = reference.load_reference_data(reference_file, memory_map=False)
+    reference_value = reference.get_ref_at_pos(
         ref_data=reference_data, position=position
     )
 
