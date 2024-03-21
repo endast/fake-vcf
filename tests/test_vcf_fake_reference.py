@@ -161,7 +161,7 @@ def test_parquet_reference_outside_reference():
     seed_value = 42
 
     with pytest.raises(ValueError):
-        virtual_vcf = VirtualVCF(
+        VirtualVCF(
             num_rows=100,
             num_samples=10,
             random_seed=seed_value,

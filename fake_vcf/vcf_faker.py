@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional
 
 import random
@@ -13,11 +15,11 @@ class VirtualVCF:
         num_rows: int,
         num_samples: int,
         chromosome: str,
-        sample_prefix: Optional[str] = "SAMPLES",
-        random_seed: Optional[int] = None,
-        phased: Optional[bool] = True,
-        large_format: Optional[bool] = True,
-        reference_file: Optional[str | Path] = None,
+        sample_prefix: str | None = "SAMPLES",
+        random_seed: int | None = None,
+        phased: bool | None = True,
+        large_format: bool | None = True,
+        reference_file: str | Path | None = None,
     ):
         """
         Initialize VirtualVCF object.
@@ -44,7 +46,7 @@ class VirtualVCF:
         # Use a per instance seed for reproducibility
         self.random = random.Random(random_seed)
         self.large_format = large_format
-        self.referene_file = Path(reference_file) if reference_file else None
+        self.reference_file = Path(reference_file) if reference_file else None
         self.header = "\n".join(
             [
                 "##fileformat=VCFv4.2",
@@ -130,8 +132,8 @@ class VirtualVCF:
         self.current_pos = 0
 
         self.reference_data = None
-        if self.referene_file:
-            self.reference_data = reference.load_reference_data(self.referene_file)
+        if self.reference_file:
+            self.reference_data = reference.load_reference_data(self.reference_file)
             if self.reference_data.shape[0] < max(self.positions):
                 raise ValueError(
                     f"""Max position size {max(self.positions)} is outside the reference which has a max of {len(self.reference_data)}"""
