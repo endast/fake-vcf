@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pyarrow.parquet as pq
 import pytest
 
 import fake_vcf.reference as refrence
@@ -53,3 +54,30 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
         include_sequences=[sequence_id], file_path=fasta_file
     )
     assert sum([ord(s) for s in sequences[0]["sequence"]]) == expected_sequence_sum
+
+
+@pytest.mark.parametrize(
+    "reference_file_name, position, expected_reference_value",
+    (
+        ("fasta_chr1.parquet", 0, "N"),
+        ("fasta_chr1.parquet", 10, "N"),
+        ("fasta_chr1.parquet", 20, "N"),
+        ("fasta_chr1.parquet", 25, "N"),
+        ("fasta_chr1.parquet", 46, "N"),
+        ("fasta_chr1.parquet", 50, "N"),
+        ("fasta_chr1.parquet", 100, "N"),
+        ("fasta_chr1.parquet", 460, "T"),
+        ("fasta_chr1.parquet", 500, "C"),
+        ("fasta_chr1.parquet", 1000, "G"),
+    ),
+)
+def test_reading_reference_parquet_files(
+    reference_file_name, position, expected_reference_value
+):
+    reference_dir = test_data_dir / "reference/parquet"
+    reference_file = reference_dir / reference_file_name
+    reference_data = pq.read_table(reference_file, memory_map=True)
+    reference_value = reference_data.take([position]).to_pandas().iloc[0, 0]
+
+    assert reference_value == expected_reference_value
+    assert reference_data.num_columns == 1
