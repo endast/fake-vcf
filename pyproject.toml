@@ -35,22 +35,22 @@ classifiers = [  #! Update me
 python = "^3.9"
 
 typer = {extras = ["all"], version = "^0.9.0"}
-rich = "^13.7.0"
+rich = "^13.7.1"
 tqdm = "^4.66.0"
 pandas = "^2.2.0"
 pyarrow = "^15.0.0"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7.6"
-black = {version = "^24.2.0", allow-prereleases = false}
+bandit = "^1.7.8"
+black = {version = "^24.3.0", allow-prereleases = false}
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.13.2"}
 pre-commit = "^3.5.0"
 pydocstyle = "^6.3.0"
 pylint = "^3.1.0"
-pytest = "^8.0.1"
+pytest = "^8.1.1"
 pyupgrade = "^3.15.0"
-coverage = "^7.4.3"
+coverage = "^7.4.4"
 coverage-badge = "^1.1.0"
 pytest-html = "^4.0.2"
 pytest-cov = "^4.1.0"
