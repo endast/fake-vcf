@@ -87,7 +87,7 @@ def test_reading_reference_parquet_files(
     reference_dir = test_data_dir / "reference/parquet"
     reference_file = reference_dir / reference_file_name
     reference_data = pq.read_table(reference_file, memory_map=True)
-    reference_value = reference_data.take([position]).to_pandas().iloc[0, 0]
+    reference_value = reference_data.take([position])[0][0].as_py()
 
     assert reference_value == expected_reference_value
     assert reference_data.num_columns == 1
