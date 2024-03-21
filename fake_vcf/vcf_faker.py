@@ -4,7 +4,7 @@ import random
 from collections import deque
 from pathlib import Path
 
-from fake_vcf import version
+from fake_vcf import reference, version
 
 
 class VirtualVCF:
@@ -17,7 +17,7 @@ class VirtualVCF:
         random_seed: Optional[int] = None,
         phased: Optional[bool] = True,
         large_format: Optional[bool] = True,
-        reference_file: Optional[str] = None,
+        reference_file: Optional[str | Path] = None,
     ):
         """
         Initialize VirtualVCF object.
@@ -128,6 +128,14 @@ class VirtualVCF:
 
         self.current_pos = 0
 
+        self.reference_data = None
+        if self.referene_file:
+            self.reference_data = reference.load_reference_data(self.referene_file)
+            if self.reference_data.shape[0] < max(self.positions):
+                raise ValueError(
+                    f"""Max position size {max(self.positions)} is outside the reference which has a max of {len(self.reference_data)}"""
+                )
+
     def __iter__(self):
         """
         Iterates over VirtualVCF object.
@@ -169,6 +177,17 @@ class VirtualVCF:
 
         return self.header
 
+    def _get_ref_at_pos(self, position, ref_index):
+        """
+        Retrieves the reference value at a given position if it exists in reference data
+        or returns the allele at the given index.
+        """
+        if self.reference_data:
+            reference_value = reference.get_ref_at_pos(self.reference_data, position)
+        else:
+            reference_value = self.alleles[ref_index]
+        return reference_value
+
     def _generate_vcf_row(self):
         """
         Generates a VCF row.
@@ -179,7 +198,7 @@ class VirtualVCF:
         # Generate random values for each field in the VCF row
         pos = f"{position}"
         vid = f"rs{self.random.randint(1, 1000)}"
-        ref = self.alleles[ref_index]
+        ref = self._get_ref_at_pos(position, ref_index)
         alt = self.alleles[ref_index - self.random.randint(1, 2)]
         qual = f"{self.random.randint(10, 100)}"
         filt = self.random.choice(["PASS"])
