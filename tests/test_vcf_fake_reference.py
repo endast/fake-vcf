@@ -57,37 +57,38 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
 
 
 @pytest.mark.parametrize(
-    "reference_file_name, position, expected_reference_value",
+    "chrom, position, expected_reference_value",
     (
-        ("fasta_chr1.parquet", 0, "N"),
-        ("fasta_chr1.parquet", 10, "N"),
-        ("fasta_chr1.parquet", 20, "N"),
-        ("fasta_chr1.parquet", 25, "N"),
-        ("fasta_chr1.parquet", 46, "N"),
-        ("fasta_chr1.parquet", 50, "N"),
-        ("fasta_chr1.parquet", 100, "N"),
-        ("fasta_chr1.parquet", 460, "T"),
-        ("fasta_chr1.parquet", 500, "C"),
-        ("fasta_chr1.parquet", 1000, "G"),
-        ("fasta_chr2.parquet", 0, "N"),
-        ("fasta_chr2.parquet", 10, "N"),
-        ("fasta_chr2.parquet", 20, "N"),
-        ("fasta_chr2.parquet", 25, "N"),
-        ("fasta_chr2.parquet", 46, "N"),
-        ("fasta_chr2.parquet", 50, "N"),
-        ("fasta_chr2.parquet", 100, "A"),
-        ("fasta_chr2.parquet", 460, "C"),
-        ("fasta_chr2.parquet", 500, "T"),
-        ("fasta_chr2.parquet", 1000, "T"),
+        ("chr1", 0, "N"),
+        ("chr1", 10, "N"),
+        ("chr1", 20, "N"),
+        ("chr1", 25, "N"),
+        ("chr1", 46, "N"),
+        ("chr1", 50, "N"),
+        ("chr1", 100, "N"),
+        ("chr1", 460, "T"),
+        ("chr1", 500, "C"),
+        ("chr1", 1000, "G"),
+        ("chr2", 0, "N"),
+        ("chr2", 10, "N"),
+        ("chr2", 20, "N"),
+        ("chr2", 25, "N"),
+        ("chr2", 46, "N"),
+        ("chr2", 50, "N"),
+        ("chr2", 100, "A"),
+        ("chr2", 460, "C"),
+        ("chr2", 500, "T"),
+        ("chr2", 1000, "T"),
     ),
 )
-def test_reading_reference_parquet_files(
-    reference_file_name, position, expected_reference_value
-):
+def test_reading_reference_parquet_files(chrom, position, expected_reference_value):
     reference_dir = test_data_dir / "reference/parquet"
-    reference_file = reference_dir / reference_file_name
-    reference_data = pq.read_table(reference_file, memory_map=True)
-    reference_value = reference_data.take([position])[0][0].as_py()
+    reference_file = reference_dir / f"fasta_{chrom}.parquet"
+    reference_data = refrence.load_reference_data(reference_file, memory_map=True)
+    reference_value = refrence.get_ref_at_pos(
+        ref_data=reference_data, position=position
+    )
 
     assert reference_value == expected_reference_value
     assert reference_data.num_columns == 1
+    assert chrom in f"{reference_data.schema}"

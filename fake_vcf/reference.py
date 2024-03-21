@@ -5,6 +5,16 @@ import pyarrow.parquet as pq
 from tqdm import tqdm
 
 
+def get_ref_at_pos(ref_data, position):
+    reference_value = ref_data.take([position])[0][0].as_py()
+    return reference_value
+
+
+def load_reference_data(reference_file, memory_map=True):
+    reference_data = pq.read_table(reference_file, memory_map=memory_map)
+    return reference_data
+
+
 def parse_fasta(file_path, include_sequences):
     sequences = []
     include_sequences = set(include_sequences) if include_sequences else set()
