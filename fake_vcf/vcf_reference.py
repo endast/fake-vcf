@@ -47,7 +47,7 @@ def parse_fasta(file_path, include_sequences):
     return sequences
 
 
-def main():
+def import_reference():
     script_dir = Path(__file__).resolve().parent
     file_path = script_dir / ("../tests/test_data/reference/reference_small.fa")
 
@@ -73,4 +73,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import_reference()

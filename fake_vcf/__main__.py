@@ -1,3 +1,6 @@
+from typing import List
+
+import time
 from pathlib import Path
 
 import typer
@@ -5,6 +8,7 @@ from rich.console import Console
 
 from fake_vcf import version
 from fake_vcf.vcf_generator import fake_vcf_data
+from fake_vcf.vcf_reference import import_reference
 
 app = typer.Typer(
     name="fake-vcf",
@@ -32,10 +36,30 @@ def version_callback(print_version: bool) -> None:
 @app.command(name="import-reference")
 def vcf_reference_import(
     reference_file_path: Path = typer.Argument(
-        help="Path to fake vcf file. If the path ends with .gz the file will be gzipped.",
+        help="Path to reference fasta file.",
+    ),
+    reference_storage_path: Path = typer.Argument(
+        help="Where to store the refences.",
+    ),
+    included_chromosomes: List[str] = typer.Option(
+        None,
+        "--included_chromosomes",
+        "-c",
+        help="List of chromosomes to extract from reference, if not specified all will be imported",
     ),
 ) -> None:
     print(f"Importing reference {reference_file_path}")
+    if included_chromosomes:
+        print(
+            f"Importing {len(included_chromosomes)} chromosomes from reference {reference_file_path}"
+        )
+        print(f"{', '.join(included_chromosomes)}")
+        for included_chromosome in included_chromosomes:
+            print(".", end="")
+    else:
+        print(f"Importing all chromosomes from reference {reference_file_path}")
+    # import_reference()
+    assert reference_storage_path.exists()
 
 
 @app.command(name="generate")
