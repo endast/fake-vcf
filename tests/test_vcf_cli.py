@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from typer.testing import CliRunner
 
@@ -25,6 +27,9 @@ def is_bgzip_compressed(file_path):
     return magic_bytes == b"\x1F\x8B\x08"
 
 
+script_dir = Path(__file__).resolve().parent
+
+
 @pytest.mark.generate_vcf
 def test_fake_vcf_reference_import_no_input():
     result = runner.invoke(app, [IMPORT_REFERENCE_CMD])
@@ -45,7 +50,14 @@ def test_fake_vcf_reference_import_only_input():
 
 @pytest.mark.reference_import
 def test_fake_vcf_reference_import_input_output(tmp_path):
-    result = runner.invoke(app, [IMPORT_REFERENCE_CMD, "reference.fa", tmp_path])
+    small_reference_path = script_dir / (
+        "../tests/test_data/reference/reference_small.fa"
+    )
+
+    result = runner.invoke(
+        app,
+        [IMPORT_REFERENCE_CMD, small_reference_path.as_posix(), tmp_path.as_posix()],
+    )
     assert result.exit_code == 0
 
 

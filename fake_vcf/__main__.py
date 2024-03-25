@@ -58,8 +58,11 @@ def vcf_reference_import(
             print(".", end="")
     else:
         print(f"Importing all chromosomes from reference {reference_file_path}")
-    # import_reference()
+
     assert reference_storage_path.exists()
+    assert reference_file_path.exists()
+    import_reference(file_path=reference_file_path, output_dir=reference_storage_path)
+    assert (reference_storage_path / "fasta_chr1.parquet").exists()
 
 
 @app.command(name="generate")

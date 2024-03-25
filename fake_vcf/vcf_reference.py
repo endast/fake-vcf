@@ -47,9 +47,8 @@ def parse_fasta(file_path, include_sequences):
     return sequences
 
 
-def import_reference():
-    script_dir = Path(__file__).resolve().parent
-    file_path = script_dir / ("../tests/test_data/reference/reference_small.fa")
+def import_reference(file_path, output_dir):
+    output_dir = Path(output_dir)
 
     include_sequences = [f"chr{c}" for c in range(1, 23)]
     print(f"Getting sequences from {file_path}\n including {include_sequences}")
@@ -60,9 +59,8 @@ def import_reference():
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
 
-        parquet_file = (
-            script_dir / "../reference_fasta" / f"fasta_{parsed_sequence['id']}.parquet"
-        )
+        parquet_file = output_dir / f"fasta_{parsed_sequence['id']}.parquet"
+
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],
             names=[parsed_sequence["id"]],
