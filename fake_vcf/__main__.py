@@ -29,6 +29,15 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
+@app.command(name="reference-import")
+def vcf_reference_import(
+    reference_file_path: Path = typer.Argument(
+        help="Path to fake vcf file. If the path ends with .gz the file will be gzipped.",
+    ),
+) -> None:
+    print(f"Importing reference {reference_file_path}")
+
+
 @app.command(name="fake-vcf")
 def main(
     fake_vcf_path: Path = typer.Option(
