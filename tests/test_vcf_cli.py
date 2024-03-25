@@ -7,6 +7,8 @@ from tests.test_vcf_fake import NR_NON_SAMPLE_COL
 
 runner = CliRunner()
 
+GENERATE_CMD = "generate"
+
 
 def is_gz_file(filepath):
     with open(filepath, "rb") as test_f:
@@ -23,14 +25,14 @@ def is_bgzip_compressed(file_path):
 
 
 def test_app_no_input():
-    result = runner.invoke(app, ["fake-vcf"])
+    result = runner.invoke(app, [GENERATE_CMD])
     assert result.exit_code == 0
     assert "source=VCFake" in result.stdout
 
 
 def test_app_no_compression_output(tmp_path):
     output_file = tmp_path / "example.vcf"
-    result = runner.invoke(app, ["fake-vcf", "-o", output_file])
+    result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
     assert result.exit_code == 0
     assert output_file.exists()
     assert "No compression" in result.stdout
@@ -43,7 +45,7 @@ def test_app_no_compression_output(tmp_path):
 
 def test_app_compression(tmp_path):
     output_file = tmp_path / "example.vcf.gz"
-    result = runner.invoke(app, ["fake-vcf", "-o", output_file])
+    result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
     assert result.exit_code == 0
     assert output_file.exists()
     assert "Using compression" in result.stdout
@@ -56,7 +58,7 @@ def test_app_compression(tmp_path):
 
 
 def test_app_seed_same(tmp_path):
-    args = ["fake-vcf", "--seed", "42"]
+    args = [GENERATE_CMD, "--seed", "42"]
 
     result_1 = runner.invoke(app, args)
     result_2 = runner.invoke(app, args)
@@ -66,7 +68,7 @@ def test_app_seed_same(tmp_path):
 
 
 def test_app_seed_differ(tmp_path):
-    base_args = ["fake-vcf", "--seed"]
+    base_args = [GENERATE_CMD, "--seed"]
     result_1 = runner.invoke(app, base_args + ["42"])
     result_2 = runner.invoke(app, base_args + ["1337"])
     assert result_1.exit_code == 0
@@ -75,7 +77,7 @@ def test_app_seed_differ(tmp_path):
 
 
 def test_app_version(tmp_path):
-    result = runner.invoke(app, ["fake-vcf", "-v"])
+    result = runner.invoke(app, [GENERATE_CMD, "-v"])
     assert result.exit_code == 0
     assert version in result.stdout
 
@@ -87,7 +89,7 @@ def test_app_version(tmp_path):
     ],
 )
 def test_app_chr_flag(chr):
-    result = runner.invoke(app, ["fake-vcf", "-c", chr])
+    result = runner.invoke(app, [GENERATE_CMD, "-c", chr])
     assert result.exit_code == 0
     assert chr in result.stdout
 
@@ -103,7 +105,7 @@ def test_app_chr_flag(chr):
     ],
 )
 def test_app_sample_prefix_flag(prefix):
-    result = runner.invoke(app, ["fake-vcf", "-p", prefix])
+    result = runner.invoke(app, [GENERATE_CMD, "-p", prefix])
     assert result.exit_code == 0
     assert f"{prefix}0000" in result.stdout
 
@@ -115,7 +117,7 @@ def test_app_sample_prefix_flag(prefix):
     ],
 )
 def test_app_nr_rows(expected_rows):
-    result = runner.invoke(app, ["fake-vcf", "-r", f"{expected_rows}"])
+    result = runner.invoke(app, [GENERATE_CMD, "-r", f"{expected_rows}"])
     row_count = len([r for r in result.stdout.split("\n") if r.startswith("chr1")])
     assert result.exit_code == 0
     assert row_count == expected_rows
@@ -128,7 +130,7 @@ def test_app_nr_rows(expected_rows):
     ],
 )
 def test_app_nr_samples(expected_sample_count):
-    result = runner.invoke(app, ["fake-vcf", "-s", f"{expected_sample_count}"])
+    result = runner.invoke(app, [GENERATE_CMD, "-s", f"{expected_sample_count}"])
     sample_count = len(
         [r for r in result.stdout.split("\n") if r.startswith("chr1")][0].split("\t")
     )

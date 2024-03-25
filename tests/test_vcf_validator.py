@@ -9,6 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 from fake_vcf.__main__ import app
+from tests.test_vcf_cli import GENERATE_CMD
 
 runner = CliRunner()
 
@@ -67,7 +68,7 @@ def run_vcf_validator(vcf_file_path, result_path):
     ),
 )
 def test_vcf_file_validation(cli_args: tuple, tmp_path):
-    args = ["fake-vcf"]
+    args = [GENERATE_CMD]
     for cli_arg in cli_args:
         if isinstance(cli_arg, list):
             args += cli_arg
