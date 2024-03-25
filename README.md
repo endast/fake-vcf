@@ -19,7 +19,7 @@
 
 *fake-vcf* generates fake [vcf files](https://en.wikipedia.org/wiki/Variant_Call_Format) for testing purposes.
 
-This is still a work in progress, originally created for the [DeepRVAT](https://github.com/PMBio/deeprvat) project. 
+This is still a work in progress, originally created for the [DeepRVAT](https://github.com/PMBio/deeprvat) project.
 
 ## Usage
 
@@ -33,7 +33,8 @@ make install
 ```
 
 If you want to write bgzip files instead gzip when writing compressed gzip files use `make install-all`. This
-install the optional dependencies. 
+install the optional dependencies.
+
 ```shell
 git clone https://github.com/endast/fake-vcf.git
 cd fake-vcf
@@ -41,13 +42,12 @@ make poetry-download
 make install-all
 ```
 
-
 ### Run
 
 By default `fake-vcf` writes to stdout
 
 ```shell
-poetry run fake-vcf -s 2 -r 2
+poetry run fake-vcf generate -s 2 -r 2
 ##fileformat=VCFv4.2
 ##source=VCFake 0.1.0
 ##FILTER=<ID=PASS,Description="All filters passed">
@@ -66,7 +66,7 @@ chr1	71	rs31	A	T	37	PASS	DP=10;AF=0.5;NS=2	GT	0|0	0|0
 You can write to a vcf file by piping the output to a file:
 
 ```shell
-poetry run fake-vcf -s 2 -r 2 > fake_file.vcf
+poetry run fake-vcf generate -s 2 -r 2 > fake_file.vcf
 ls -lah
 total 1
 -rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
@@ -75,7 +75,7 @@ total 1
 Or let the script write to a file directly using `-o`:
 
 ```shell
-poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf
+poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf
 
 Writing to file fake_file.vcf
 (No compression)
@@ -90,7 +90,7 @@ And if you want the file compressed add .gz to the file name:
 (if you installed using `install-all` the file will be compressde using bgzip, otherwise using gzip).
 
 ```shell
-poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf.gz
+poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf.gz
 
 Writing to file fake_file.vcf
 (No compression)
@@ -103,8 +103,9 @@ total 2
 ```
 
 You can also pipe the output to bgzip (or gzip) to compress it.
+
 ```shell
-poetry run fake-vcf -s 2 -r 2 | bgzip > fake_file.vcf.gz
+poetry run fake-vcf generate -s 2 -r 2 | bgzip > fake_file.vcf.gz
 ls -lah
 total 1
 -rw-r--r--   1 magnus  staff     716 Jan 30 13:38 bgzip.chr.vcf.gz
@@ -113,7 +114,7 @@ total 1
 To see all options use --help
 
 ```shell
-poetry run fake-vcf --help                   
+poetry run fake-vcf generate --help                   
                                                                                                                                                                                                                                                                                                                       
  Usage: fake-vcf [OPTIONS]                                                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                                       
@@ -129,7 +130,6 @@ poetry run fake-vcf --help
 │ --help                                       Show this message and exit.                                                                                                                                                                                                                                           │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
-
 
 ## 🛡 License
 
