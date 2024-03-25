@@ -618,3 +618,4 @@ MigrationBackup/
 vcf_validator/vcf_validator
 
 reference_fasta
+GRCh38.primary_assembly.genome.fa
