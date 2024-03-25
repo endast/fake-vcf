@@ -4,7 +4,7 @@ import random
 from collections import deque
 from pathlib import Path
 
-from fake_vcf import reference, version
+from fake_vcf import vcf_reference, version
 
 
 class VirtualVCF:
@@ -131,7 +131,7 @@ class VirtualVCF:
 
         self.reference_data = None
         if self.reference_file:
-            self.reference_data = reference.load_reference_data(self.reference_file)
+            self.reference_data = vcf_reference.load_reference_data(self.reference_file)
             if self.reference_data.shape[0] < max(self.positions):
                 raise ValueError(
                     f"""Max position size {max(self.positions)} is outside the reference which has a max of {len(self.reference_data)}"""
@@ -184,7 +184,9 @@ class VirtualVCF:
         or returns the allele at the given index.
         """
         if self.reference_data:
-            reference_value = reference.get_ref_at_pos(self.reference_data, position)
+            reference_value = vcf_reference.get_ref_at_pos(
+                self.reference_data, position
+            )
         else:
             reference_value = self.alleles[ref_index]
         return reference_value

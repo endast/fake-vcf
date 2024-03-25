@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-import fake_vcf.reference as reference
+import fake_vcf.vcf_reference as reference
 from fake_vcf.vcf_faker import VirtualVCF
 from tests.test_vcf_fake import get_vcf_data
 
