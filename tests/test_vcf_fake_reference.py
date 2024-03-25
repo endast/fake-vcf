@@ -9,6 +9,7 @@ from tests.test_vcf_fake import get_vcf_data
 test_data_dir = Path(__file__).resolve().parent / "test_data"
 
 
+@pytest.mark.reference_import
 @pytest.mark.parametrize(
     "include_sequences, fasta_file",
     (
@@ -41,6 +42,7 @@ def test_parse_sequences(include_sequences, fasta_file):
     assert all(seq["sequence"] for seq in sequences)
 
 
+@pytest.mark.reference_import
 @pytest.mark.parametrize(
     "sequence_id, fasta_file, expected_sequence_sum",
     (
@@ -57,6 +59,7 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
     assert sum([ord(s) for s in sequences[0]["sequence"]]) == expected_sequence_sum
 
 
+@pytest.mark.reference_import
 @pytest.mark.parametrize(
     "chrom, position, expected_reference_value",
     (
@@ -95,6 +98,7 @@ def test_reading_reference_parquet_files(chrom, position, expected_reference_val
     assert chrom in f"{reference_data.schema}"
 
 
+@pytest.mark.reference_import
 @pytest.mark.parametrize(
     "chrom, position, expected_reference_value",
     (
@@ -135,6 +139,7 @@ def test_reading_reference_parquet_files_with_memory_map(
     assert chrom in f"{reference_data.schema}"
 
 
+@pytest.mark.reference_import
 def test_parquet_reference():
     chrom = "chr1"
 
@@ -152,6 +157,7 @@ def test_parquet_reference():
     data_rows, metadata = get_vcf_data(virtual_vcf)
 
 
+@pytest.mark.reference_import
 def test_parquet_reference_outside_reference():
     chrom = "chr1"
 

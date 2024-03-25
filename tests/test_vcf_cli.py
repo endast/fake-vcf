@@ -25,12 +25,38 @@ def is_bgzip_compressed(file_path):
     return magic_bytes == b"\x1F\x8B\x08"
 
 
+@pytest.mark.generate_vcf
+def test_fake_vcf_reference_import_no_input():
+    result = runner.invoke(app, [IMPORT_REFERENCE_CMD])
+    assert result.exit_code == 2
+
+
+@pytest.mark.reference_import
+def test_fake_vcf_reference_import_only_input():
+    result = runner.invoke(
+        app,
+        [
+            IMPORT_REFERENCE_CMD,
+            "reference.fa",
+        ],
+    )
+    assert result.exit_code == 2
+
+
+@pytest.mark.reference_import
+def test_fake_vcf_reference_import_input_output(tmp_path):
+    result = runner.invoke(app, [IMPORT_REFERENCE_CMD, "reference.fa", tmp_path])
+    assert result.exit_code == 0
+
+
+@pytest.mark.reference_import
 def test_fake_vcf_generate_no_input():
     result = runner.invoke(app, [GENERATE_CMD])
     assert result.exit_code == 0
     assert "source=VCFake" in result.stdout
 
 
+@pytest.mark.generate_vcf
 def test_fake_vcf_generate_no_compression_output(tmp_path):
     output_file = tmp_path / "example.vcf"
     result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
@@ -44,6 +70,7 @@ def test_fake_vcf_generate_no_compression_output(tmp_path):
         assert not is_gz_file(output_file)
 
 
+@pytest.mark.generate_vcf
 def test_face_vcf_generation_compression(tmp_path):
     output_file = tmp_path / "example.vcf.gz"
     result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
@@ -58,6 +85,7 @@ def test_face_vcf_generation_compression(tmp_path):
         assert is_gz_file(output_file)
 
 
+@pytest.mark.generate_vcf
 def test_face_vcf_generation_seed_same(tmp_path):
     args = [GENERATE_CMD, "--seed", "42"]
 
@@ -68,6 +96,7 @@ def test_face_vcf_generation_seed_same(tmp_path):
     assert result_1.stdout == result_2.stdout
 
 
+@pytest.mark.generate_vcf
 def test_face_vcf_generation_seed_differ(tmp_path):
     base_args = [GENERATE_CMD, "--seed"]
     result_1 = runner.invoke(app, base_args + ["42"])
@@ -77,12 +106,14 @@ def test_face_vcf_generation_seed_differ(tmp_path):
     assert result_1.stdout != result_2.stdout
 
 
+@pytest.mark.generate_vcf
 def test_face_vcf_generation_version(tmp_path):
     result = runner.invoke(app, [GENERATE_CMD, "-v"])
     assert result.exit_code == 0
     assert version in result.stdout
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("chr",),
     [
@@ -95,6 +126,7 @@ def test_face_vcf_generation_chr_flag(chr):
     assert chr in result.stdout
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("prefix",),
     [
@@ -111,6 +143,7 @@ def test_face_vcf_generation_sample_prefix_flag(prefix):
     assert f"{prefix}0000" in result.stdout
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("expected_rows",),
     [
@@ -124,6 +157,7 @@ def test_face_vcf_generation_nr_rows(expected_rows):
     assert row_count == expected_rows
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("expected_sample_count",),
     [

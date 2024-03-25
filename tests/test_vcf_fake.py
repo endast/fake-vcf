@@ -19,6 +19,7 @@ def get_vcf_data(
     return data_rows, metadata
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("num_rows",),
     [
@@ -43,6 +44,7 @@ def test_fake_vcf_row_count(num_rows):
     assert len(data_rows) == num_rows
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("num_samples",),
     [
@@ -68,6 +70,7 @@ def test_fake_vcf_sample_count(num_samples):
     assert len(samples) - NR_NON_SAMPLE_COL == num_samples
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("num_samples",),
     [
@@ -86,6 +89,7 @@ def test_invalid_sample_count(num_samples):
         )
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("num_rows",),
     [
@@ -104,6 +108,7 @@ def test_invalid_row_count(num_rows):
         )
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     (
         "num_samples",
@@ -134,6 +139,7 @@ def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
     assert sample_names == expected
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("chromosome",),
     [
@@ -158,6 +164,7 @@ def test_fake_vcf_chromosome(chromosome):
     assert vcf_chromosome == chromosome
 
 
+@pytest.mark.generate_vcf
 def test_fake_vcf_reproducibility():
     seed_value = 42
 
@@ -174,6 +181,7 @@ def test_fake_vcf_reproducibility():
     assert orig_data == new_data
 
 
+@pytest.mark.generate_vcf
 def test_fake_vcf_novel_data():
     first_seed = 42
     second_seed = 1337

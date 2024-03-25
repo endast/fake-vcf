@@ -53,6 +53,7 @@ def run_vcf_validator(vcf_file_path, result_path):
     return result, "\n".join(all_error_data)
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     "cli_args",
     list(
