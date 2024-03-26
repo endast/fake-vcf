@@ -33,7 +33,7 @@ def to_vcf_file(virtual_vcf: VirtualVCF, fake_vcf_path: Path, num_rows: int) -> 
         print("(Using compression)")
         try:
             from Bio import bgzf as compressor
-        except ImportError:
+        except ImportError:  # pragma: no cover
             print("Biopython not installed, falling back to gzip instead of bgzip")
             import gzip as compressor
 

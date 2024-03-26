@@ -68,7 +68,3 @@ def import_reference(file_path, output_dir):
         pq.write_table(table_chr, parquet_file, compression="zstd")
 
     print("\nDONE!")
-
-
-if __name__ == "__main__":
-    import_reference()

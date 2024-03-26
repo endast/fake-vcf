@@ -1,6 +1,5 @@
 from typing import List
 
-import time
 from pathlib import Path
 
 import typer

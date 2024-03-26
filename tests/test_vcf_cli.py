@@ -118,7 +118,6 @@ def test_face_vcf_generation_compression(tmp_path):
 
 @pytest.mark.generate_vcf
 def test_face_vcf_generation_compression_no_bgzip(tmp_path):
-    pytest.importorskip("Bio")
     output_file = tmp_path / "example.vcf.gz"
     result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
     assert result.exit_code == 0
