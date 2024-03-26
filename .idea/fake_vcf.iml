@@ -9,6 +9,10 @@
       <excludeFolder url="file://$MODULE_DIR$/docs/build" />
       <excludeFolder url="file://$MODULE_DIR$/htmlcov" />
       <excludeFolder url="file://$MODULE_DIR$/reference_fasta" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/copilot/chatSessions" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/venv/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/venv/lib" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (fake_vcf)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
