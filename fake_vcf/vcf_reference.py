@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pyarrow as pa
@@ -56,19 +57,30 @@ def import_reference(file_path, output_dir):
 
     include_sequences = [f"chr{c}" for c in range(1, 23)]
     print(f"Getting sequences from {file_path}\n including {include_sequences}")
+
+    sequence_metadata_path = output_dir / "sequence_metadata.json"
+
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
+    sequence_metadata = {
+        seq["id"]: (output_dir / f"fasta_{seq['id']}.parquet").as_posix()
+        for seq in parsed_sequences
+    }
 
     # TODO Write every sequence in loop?
     print(f"\nWriting {len(parsed_sequences)} sequences to parquet\n")
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
 
-        parquet_file = output_dir / f"fasta_{parsed_sequence['id']}.parquet"
+        parquet_file = sequence_metadata[parsed_sequence["id"]]
 
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],
             names=[parsed_sequence["id"]],
         )
         pq.write_table(table_chr, parquet_file, compression="zstd")
+
+    print(f"\nWriting sequence metadata to {sequence_metadata_path}")
+    with open(sequence_metadata_path, "w") as metadata_file:
+        json.dump(sequence_metadata, metadata_file, ensure_ascii=False, indent=4)
 
     print("\nDONE!")
