@@ -16,7 +16,7 @@ runner = CliRunner()
 test_file_parent = Path(__file__).resolve().parent
 
 
-def vcf_validator():
+def vcf_validator():  # pragma: no cover
     vcf_validator_path = test_file_parent / "../vcf_validator/vcf_validator"
     system_platform = platform.system()
     if not vcf_validator_path.exists():

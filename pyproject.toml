@@ -141,7 +141,7 @@ addopts = [
 source = ["tests"]
 
 [coverage.paths]
-source = "fake-vcf"
+source = "fake_vcf"
 
 [coverage.run]
 branch = true
