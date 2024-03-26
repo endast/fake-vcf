@@ -50,11 +50,8 @@ def vcf_reference_import(
     print(f"Importing reference {reference_file_path}")
     if included_chromosomes:
         print(
-            f"Importing {len(included_chromosomes)} chromosomes from reference {reference_file_path}"
+            f"Importing {len(included_chromosomes)} chromosomes from reference {reference_file_path}: {', '.join(included_chromosomes)}"
         )
-        print(f"{', '.join(included_chromosomes)}")
-        for included_chromosome in included_chromosomes:
-            print(".", end="")
     else:
         print(f"Importing all chromosomes from reference {reference_file_path}")
 
