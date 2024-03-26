@@ -17,8 +17,8 @@ def load_reference_data(reference_file, memory_map=True):
 
 
 def parse_fasta(file_path, include_sequences):
-    sequences = []
     include_sequences = set(include_sequences) if include_sequences else None
+    sequences = []
     with open(file_path) as fasta_file:
         current_sequence = {"id": "", "sequence": []}
 
@@ -27,15 +27,16 @@ def parse_fasta(file_path, include_sequences):
 
             if line.startswith(">"):  # New sequence header
                 if include_sequences is not None:
-                    parsed_sequences = {seq["id"] for seq in sequences}
+                    parsed_sequences = {seq for seq in sequences}
                     if parsed_sequences == include_sequences:
-                        return sequences
+                        return
 
                 if current_sequence["id"] and (
                     include_sequences is None
                     or current_sequence["id"] in include_sequences
                 ):
-                    sequences.append(current_sequence.copy())
+                    sequences.append(current_sequence["id"])
+                    yield current_sequence.copy()
 
                 current_sequence = {"id": line[1:].split(" ")[0], "sequence": []}
 
@@ -48,9 +49,8 @@ def parse_fasta(file_path, include_sequences):
         if current_sequence["id"] and (
             include_sequences is None or current_sequence["id"] in include_sequences
         ):
-            sequences.append(current_sequence.copy())
-
-    return sequences
+            sequences.append(current_sequence["id"])
+            yield current_sequence.copy()
 
 
 def import_reference(file_path, output_dir, include_sequences=None):
@@ -68,17 +68,12 @@ def import_reference(file_path, output_dir, include_sequences=None):
     sequence_metadata_path = output_dir / "sequence_metadata.json"
 
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
-    sequence_metadata = {
-        seq["id"]: (output_dir / f"fasta_{seq['id']}.parquet").name
-        for seq in parsed_sequences
-    }
+    sequence_metadata = {}
 
-    # TODO Write every sequence in loop?
-    print(f"\nWriting {len(parsed_sequences)} sequences to parquet\n")
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
-
-        parquet_file = output_dir / sequence_metadata[parsed_sequence["id"]]
+        parquet_file = output_dir / f"reference_{parsed_sequence['id']}.parquet"
+        sequence_metadata[parsed_sequence["id"]] = parquet_file.name
 
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],

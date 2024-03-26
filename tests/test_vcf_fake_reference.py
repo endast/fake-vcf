@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -39,7 +40,7 @@ def test_parse_sequences(include_sequences, expected_count, fasta_file):
     )
 
     include_sequences = [] if include_sequences is None else include_sequences
-
+    sequences = list(sequences)
     assert len(sequences) == expected_count
     assert (
         all(seq["id"] in include_sequences for seq in sequences)
@@ -63,6 +64,7 @@ def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_
     sequences = reference.parse_fasta(
         include_sequences=[sequence_id], file_path=fasta_file
     )
+    sequences = list(sequences)
     assert sum([ord(s) for s in sequences[0]["sequence"]]) == expected_sequence_sum
 
 
@@ -197,6 +199,11 @@ def test_parquet_reference_outside_reference():
 def test_import_reference(tmp_path):
     output_dir = tmp_path / "output"
     reference.import_reference(file_path=small_reference_file, output_dir=output_dir)
-    assert output_dir.exists()
-    assert (output_dir / "fasta_chr1.parquet").exists()
+
     assert (output_dir / "sequence_metadata.json").exists()
+
+    with open(output_dir / "sequence_metadata.json") as metadata_file:
+        metadata = json.load(metadata_file)
+
+    for seq_id, reference_path in metadata.items():
+        assert (output_dir / reference_path).exists()
