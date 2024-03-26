@@ -38,7 +38,7 @@ def vcf_reference_import(
         help="Path to reference fasta file.",
     ),
     reference_storage_path: Path = typer.Argument(
-        help="Where to store the refences.",
+        help="Where to store the references.",
     ),
     included_chromosomes: List[str] = typer.Option(
         None,
@@ -58,10 +58,11 @@ def vcf_reference_import(
     else:
         print(f"Importing all chromosomes from reference {reference_file_path}")
 
-    assert reference_storage_path.exists()
-    assert reference_file_path.exists()
-    import_reference(file_path=reference_file_path, output_dir=reference_storage_path)
-    assert (reference_storage_path / "fasta_chr1.parquet").exists()
+    import_reference(
+        file_path=reference_file_path,
+        output_dir=reference_storage_path,
+        include_sequences=included_chromosomes,
+    )
 
 
 @app.command(name="generate")

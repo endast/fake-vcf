@@ -18,7 +18,7 @@ def load_reference_data(reference_file, memory_map=True):
 
 def parse_fasta(file_path, include_sequences):
     sequences = []
-    include_sequences = set(include_sequences) if include_sequences else set()
+    include_sequences = set(include_sequences) if include_sequences else None
     with open(file_path) as fasta_file:
         current_sequence = {"id": "", "sequence": []}
 
@@ -26,43 +26,50 @@ def parse_fasta(file_path, include_sequences):
             line = line.strip()
 
             if line.startswith(">"):  # New sequence header
-                parsed_sequences = {seq["id"] for seq in sequences}
-                if parsed_sequences == include_sequences:
-                    return sequences
+                if include_sequences is not None:
+                    parsed_sequences = {seq["id"] for seq in sequences}
+                    if parsed_sequences == include_sequences:
+                        return sequences
 
-                if (
-                    current_sequence["id"]
-                    and current_sequence["id"] in include_sequences
+                if current_sequence["id"] and (
+                    include_sequences is None
+                    or current_sequence["id"] in include_sequences
                 ):
                     sequences.append(current_sequence.copy())
 
                 current_sequence = {"id": line[1:].split(" ")[0], "sequence": []}
 
-            elif current_sequence["id"] in include_sequences:
+            elif current_sequence["id"] and (
+                include_sequences is None or current_sequence["id"] in include_sequences
+            ):
                 current_sequence["sequence"].extend(line.upper())
 
         # Add the last sequence in the file
-        if current_sequence["id"] and current_sequence["id"] in include_sequences:
+        if current_sequence["id"] and (
+            include_sequences is None or current_sequence["id"] in include_sequences
+        ):
             sequences.append(current_sequence.copy())
 
     return sequences
 
 
-def import_reference(file_path, output_dir):
+def import_reference(file_path, output_dir, include_sequences=None):
     output_dir = Path(output_dir)
 
     if not output_dir.exists():
         print(f"Creating output directory {output_dir}")
         output_dir.mkdir(parents=True)
 
-    include_sequences = [f"chr{c}" for c in range(1, 23)]
-    print(f"Getting sequences from {file_path}\n including {include_sequences}")
+    if include_sequences:
+        print(f"Getting sequences from {file_path}\n including {include_sequences}")
+    else:
+        print(f"Getting all sequences from {file_path}")
 
     sequence_metadata_path = output_dir / "sequence_metadata.json"
 
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
     sequence_metadata = {
-        seq["id"]: (output_dir / f"fasta_{seq['id']}.parquet").as_posix()
+        seq["id"]: (output_dir / f"fasta_{seq['id']}.parquet").name
         for seq in parsed_sequences
     }
 
@@ -71,7 +78,7 @@ def import_reference(file_path, output_dir):
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
 
-        parquet_file = sequence_metadata[parsed_sequence["id"]]
+        parquet_file = output_dir / sequence_metadata[parsed_sequence["id"]]
 
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],

@@ -13,32 +13,39 @@ small_reference_file = reference_dir / "reference_small.fa"
 
 @pytest.mark.reference_import
 @pytest.mark.parametrize(
-    "include_sequences, fasta_file",
+    "include_sequences, expected_count, fasta_file",
     (
-        (None, small_reference_file),
+        (None, 10, small_reference_file),
         (
             [f"chr{c}" for c in range(1, 11)],
+            10,
             small_reference_file,
         ),
         (
             [f"chr{c}" for c in range(1, 5)],
+            4,
             small_reference_file,
         ),
         (
             [f"chr{c}" for c in range(3, 8)],
+            5,
             small_reference_file,
         ),
     ),
 )
-def test_parse_sequences(include_sequences, fasta_file):
+def test_parse_sequences(include_sequences, expected_count, fasta_file):
     sequences = reference.parse_fasta(
         include_sequences=include_sequences, file_path=fasta_file
     )
 
     include_sequences = [] if include_sequences is None else include_sequences
 
-    assert len(sequences) == len(include_sequences)
-    assert all(seq["id"] in include_sequences for seq in sequences)
+    assert len(sequences) == expected_count
+    assert (
+        all(seq["id"] in include_sequences for seq in sequences)
+        if include_sequences
+        else True
+    )
     assert all(len(seq["sequence"]) > 0 for seq in sequences)
     assert all(seq["sequence"] for seq in sequences)
 
@@ -192,3 +199,4 @@ def test_import_reference(tmp_path):
     reference.import_reference(file_path=small_reference_file, output_dir=output_dir)
     assert output_dir.exists()
     assert (output_dir / "fasta_chr1.parquet").exists()
+    assert (output_dir / "sequence_metadata.json").exists()
