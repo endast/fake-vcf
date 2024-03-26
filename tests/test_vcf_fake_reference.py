@@ -7,29 +7,30 @@ from fake_vcf.vcf_faker import VirtualVCF
 from tests.test_vcf_fake import get_vcf_data
 
 test_data_dir = Path(__file__).resolve().parent / "test_data"
+reference_dir = test_data_dir / "reference"
+small_reference_file = reference_dir / "reference_small.fa"
 
 
 @pytest.mark.reference_import
 @pytest.mark.parametrize(
     "include_sequences, fasta_file",
     (
-        (None, test_data_dir / "reference/reference_small.fa"),
+        (None, small_reference_file),
         (
             [f"chr{c}" for c in range(1, 11)],
-            test_data_dir / "reference/reference_small.fa",
+            small_reference_file,
         ),
         (
             [f"chr{c}" for c in range(1, 5)],
-            test_data_dir / "reference/reference_small.fa",
+            small_reference_file,
         ),
         (
             [f"chr{c}" for c in range(3, 8)],
-            test_data_dir / "reference/reference_small.fa",
+            small_reference_file,
         ),
     ),
 )
 def test_parse_sequences(include_sequences, fasta_file):
-    fasta_file = test_data_dir / "reference/reference_small.fa"
     sequences = reference.parse_fasta(
         include_sequences=include_sequences, file_path=fasta_file
     )
@@ -46,13 +47,12 @@ def test_parse_sequences(include_sequences, fasta_file):
 @pytest.mark.parametrize(
     "sequence_id, fasta_file, expected_sequence_sum",
     (
-        ("chr1", test_data_dir / "reference/reference_small.fa", 77573),
-        ("chr2", test_data_dir / "reference/reference_small.fa", 95119),
-        ("chr5", test_data_dir / "reference/reference_small.fa", 129915),
+        ("chr1", small_reference_file, 77573),
+        ("chr2", small_reference_file, 95119),
+        ("chr5", small_reference_file, 129915),
     ),
 )
 def test_parse_sequences_content_sum(sequence_id, fasta_file, expected_sequence_sum):
-    fasta_file = test_data_dir / "reference/reference_small.fa"
     sequences = reference.parse_fasta(
         include_sequences=[sequence_id], file_path=fasta_file
     )
@@ -128,8 +128,10 @@ def test_reading_reference_parquet_files_with_memory_map(
     chrom, position, expected_reference_value
 ):
     reference_dir = test_data_dir / "reference/parquet"
-    reference_file = reference_dir / f"fasta_{chrom}.parquet"
-    reference_data = reference.load_reference_data(reference_file, memory_map=False)
+    reference_parquet_file = reference_dir / f"fasta_{chrom}.parquet"
+    reference_data = reference.load_reference_data(
+        reference_parquet_file, memory_map=False
+    )
     reference_value = reference.get_ref_at_pos(
         ref_data=reference_data, position=position
     )
@@ -170,7 +172,7 @@ def test_parquet_reference_outside_reference():
     chrom = "chr1"
 
     reference_dir = test_data_dir / "reference/parquet"
-    reference_file = reference_dir / f"fasta_{chrom}.parquet"
+    reference_parquet_file = reference_dir / f"fasta_{chrom}.parquet"
 
     seed_value = 42
 
@@ -180,5 +182,12 @@ def test_parquet_reference_outside_reference():
             num_samples=10,
             random_seed=seed_value,
             chromosome="chr1",
-            reference_file=reference_file,
+            reference_file=reference_parquet_file,
         )
+
+
+@pytest.mark.reference_import
+def test_import_reference(tmp_path):
+    output_dir = tmp_path / "output"
+    reference.import_reference(file_path=small_reference_file, output_dir=output_dir)
+    assert output_dir.exists()
