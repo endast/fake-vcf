@@ -191,3 +191,4 @@ def test_import_reference(tmp_path):
     output_dir = tmp_path / "output"
     reference.import_reference(file_path=small_reference_file, output_dir=output_dir)
     assert output_dir.exists()
+    assert (output_dir / "fasta_chr1.parquet").exists()

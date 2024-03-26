@@ -50,6 +50,10 @@ def parse_fasta(file_path, include_sequences):
 def import_reference(file_path, output_dir):
     output_dir = Path(output_dir)
 
+    if not output_dir.exists():
+        print(f"Creating output directory {output_dir}")
+        output_dir.mkdir(parents=True)
+
     include_sequences = [f"chr{c}" for c in range(1, 23)]
     print(f"Getting sequences from {file_path}\n including {include_sequences}")
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
