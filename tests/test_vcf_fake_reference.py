@@ -142,19 +142,27 @@ def test_reading_reference_parquet_files_with_memory_map(
 @pytest.mark.reference_import
 def test_parquet_reference():
     chrom = "chr1"
+    row_count = 10
+    sample_count = 10
 
     reference_dir = test_data_dir / "reference/parquet"
     reference_file = reference_dir / f"fasta_{chrom}.parquet"
 
     seed_value = 42
+
+    metadata_col_count = 9
     virtual_vcf = VirtualVCF(
-        num_rows=10,
-        num_samples=10,
+        num_rows=row_count,
+        num_samples=sample_count,
         random_seed=seed_value,
         chromosome="chr1",
         reference_file=reference_file,
     )
     data_rows, metadata = get_vcf_data(virtual_vcf)
+    columns = data_rows[0].split("\t")
+
+    assert len(data_rows) == row_count
+    assert len(columns) - metadata_col_count == sample_count
 
 
 @pytest.mark.reference_import
