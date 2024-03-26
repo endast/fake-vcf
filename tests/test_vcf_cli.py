@@ -62,6 +62,25 @@ def test_fake_vcf_reference_import_input_output(tmp_path):
 
 
 @pytest.mark.reference_import
+def test_fake_vcf_reference_import_input_output_incl_chrom(tmp_path):
+    small_reference_path = script_dir / (
+        "../tests/test_data/reference/reference_small.fa"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            IMPORT_REFERENCE_CMD,
+            "--included_chromosomes",
+            "chr1",
+            small_reference_path.as_posix(),
+            tmp_path.as_posix(),
+        ],
+    )
+    assert result.exit_code == 0
+
+
+@pytest.mark.generate_vcf
 def test_fake_vcf_generate_no_input():
     result = runner.invoke(app, [GENERATE_CMD])
     assert result.exit_code == 0
@@ -84,6 +103,22 @@ def test_fake_vcf_generate_no_compression_output(tmp_path):
 
 @pytest.mark.generate_vcf
 def test_face_vcf_generation_compression(tmp_path):
+    output_file = tmp_path / "example.vcf.gz"
+    result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
+    assert result.exit_code == 0
+    assert output_file.exists()
+    assert "Using compression" in result.stdout
+
+    # If biopython is installed check that we wrote a bgzip file
+    try:
+        assert is_bgzip_compressed(output_file)
+    except AssertionError:
+        assert is_gz_file(output_file)
+
+
+@pytest.mark.generate_vcf
+def test_face_vcf_generation_compression_no_bgzip(tmp_path):
+    pytest.importorskip("Bio")
     output_file = tmp_path / "example.vcf.gz"
     result = runner.invoke(app, [GENERATE_CMD, "-o", output_file])
     assert result.exit_code == 0
