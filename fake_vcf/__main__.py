@@ -1,5 +1,6 @@
 from typing import List
 
+import time
 from pathlib import Path
 
 import typer
@@ -55,11 +56,15 @@ def vcf_reference_import(
     else:
         print(f"Importing all chromosomes from reference {reference_file_path}")
 
+    start_time = time.time()
     import_reference(
         file_path=reference_file_path,
         output_dir=reference_storage_path,
         include_sequences=included_chromosomes,
     )
+    end_time = time.time()
+
+    print(f"Reference imported in {end_time - start_time:.2f} seconds.")
 
 
 @app.command(name="generate")
