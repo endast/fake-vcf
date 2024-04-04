@@ -23,7 +23,7 @@ By default `fake-vcf` writes to stdout
 
 .. code-block::
 
-  poetry run fake-vcf -s 2 -r 2
+  poetry run fake-vcf generate -s 2 -r 2
   ##fileformat=VCFv4.2
   ##source=VCFake 0.2.0
   ##FILTER=<ID=PASS,Description="All filters passed">
@@ -43,7 +43,7 @@ You can write to a vcf file by piping the output to a file:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 > fake_file.vcf
+  poetry run fake-vcf generate -s 2 -r 2 > fake_file.vcf
   ls -lah
   total 1
   -rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
@@ -52,7 +52,7 @@ Or let the script write to a file directly using `-o`:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf
+  poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf
 
   Writing to file fake_file.vcf
   (No compression)
@@ -67,7 +67,7 @@ And if you want the file gzipped add .gz to the file name:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf.gz
+  poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf.gz
 
   Writing to file fake_file.vcf
   (No compression)
@@ -84,7 +84,7 @@ To see all options use --help
 
 .. code-block:: shell
 
-    poetry run fake-vcf --help
+    poetry run fake-vcf generate --help
 
    Usage: fake-vcf [OPTIONS]
 
