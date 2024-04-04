@@ -48,6 +48,30 @@ def vcf_reference_import(
         help="List of chromosomes to extract from reference, if not specified all will be imported",
     ),
 ) -> None:
+    """
+    Import reference fasta file and extract specified chromosomes if provided.
+
+    Parameters:
+        reference_file_path (Path): Path to reference fasta file.
+        reference_storage_path (Path): Where to store the references.
+        included_chromosomes (Optional[List[str]], optional): List of chromosomes
+            to extract from reference. If not specified, all will be imported.
+
+    Returns:
+        None: This function does not return anything.
+
+    Example:
+        To import a reference file and extract specific chromosomes:
+        ```
+        vcf_reference_import("path/to/reference.fasta", "output/directory", included_chromosomes=["chr1", "chr2"])
+        ```
+
+        To import a reference file without extracting specific chromosomes:
+        ```
+        vcf_reference_import("path/to/reference.fasta", "output/directory")
+        ```
+    """
+
     print(f"Importing reference {reference_file_path}")
     if included_chromosomes:
         print(
@@ -103,7 +127,7 @@ def main(
     ),
 ) -> None:
     """
-    Main function to generate fake VCF data using Typer CLI.
+    Generate fake VCF data
 
     Args:
         fake_vcf_path (Path): Path to fake VCF file or None to write to standard output.
