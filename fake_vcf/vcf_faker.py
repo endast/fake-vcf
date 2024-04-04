@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import random
 from collections import deque
 from pathlib import Path
@@ -17,7 +18,7 @@ class VirtualVCF:
         random_seed: int | None = None,
         phased: bool | None = True,
         large_format: bool | None = True,
-        reference_file: str | Path | None = None,
+        reference_dir: str | Path | None = None,
     ):
         """
         Initialize VirtualVCF object.
@@ -30,7 +31,7 @@ class VirtualVCF:
             random_seed (int, optional): Random seed for reproducibility. Defaults to None.
             phased (bool, optional): Phased or unphased genotypes. Defaults to True.
             large_format (bool, optional): Use large format VCF. Defaults to True.
-            reference_file (str or Path, optional): Path to reference file.
+            reference_dir (str or Path, optional): Path to reference file directory.
 
         Raises:
             ValueError: If num_samples or num_rows is less than 1.
@@ -44,7 +45,11 @@ class VirtualVCF:
         # Use a per instance seed for reproducibility
         self.random = random.Random(random_seed)
         self.large_format = large_format
-        self.reference_file = Path(reference_file) if reference_file else None
+        self.reference_dir = Path(reference_dir) if reference_dir else None
+        self.reference_file = None
+        self.reference_metadata = {}
+        self._setup_reference_data()
+
         self.header = "\n".join(
             [
                 "##fileformat=VCFv4.2",
@@ -52,7 +57,7 @@ class VirtualVCF:
                 '##FILTER=<ID=PASS,Description="All filters passed">',
                 '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
                 f"##contig=<ID={chromosome}>",
-                "##reference=ftp://ftp.example.com/sample.fa",
+                f"##reference=ftp://ftp.example.com/{self.reference_metadata.get('source_reference_file', 'sample.fa')}",
                 '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">',
                 '##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">',
                 '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
@@ -130,7 +135,7 @@ class VirtualVCF:
         self.current_pos = 0
 
         self.reference_data = None
-        if self.reference_file:
+        if self.reference_dir:
             self.reference_data = vcf_reference.load_reference_data(self.reference_file)
             if self.reference_data.shape[0] < max(self.positions):
                 raise ValueError(
@@ -227,6 +232,24 @@ class VirtualVCF:
         self.current_pos += 1
 
         return row
+
+    def _setup_reference_data(self):
+
+        if self.reference_dir:
+            with open(
+                self.reference_dir / vcf_reference.METADATA_FILE_NAME
+            ) as metadata_file:
+                self.reference_metadata = json.load(metadata_file)
+
+            if self.chromosome not in self.reference_metadata["reference_files"].keys():
+                raise ValueError(
+                    f"""{self.chromosome} does not exist in the reference data"""
+                )
+
+            self.reference_file = (
+                self.reference_dir
+                / self.reference_metadata["reference_files"][self.chromosome]
+            )
 
     def _generate_vcf_data(self):
         """

@@ -125,6 +125,13 @@ def main(
         is_eager=True,
         help="Prints the version of the fake-vcf package.",
     ),
+    reference_dir: Path = typer.Option(
+        None,
+        "--reference-dir-path",
+        "-f",
+        help="Path to imported refernce directory.",
+        exists=True,
+    ),
 ) -> None:
     """
     Generate fake VCF data
@@ -139,6 +146,7 @@ def main(
         phased (bool): Simulate phased genotypes.
         large_format (bool): Write large format VCF.
         print_version (bool): Flag to print the version of the fake-vcf package.
+        reference_dir (Path): Path to directory containing imported reference_data.
     """
     fake_vcf_data(
         fake_vcf_path=fake_vcf_path,
@@ -149,6 +157,7 @@ def main(
         sample_prefix=sample_prefix,
         phased=phased,
         large_format=large_format,
+        reference_dir_path=reference_dir,
     )
 
 

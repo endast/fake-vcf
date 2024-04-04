@@ -60,12 +60,13 @@ def fake_vcf_data(
     sample_prefix,
     phased,
     large_format,
+    reference_dir_path,
 ):
     """
     Generates fake VCF data and writes it to either a file or standard output.
 
     Args:
-        fake_vcf_path (str or None): Path to the fake VCF file or None to write to standard output.
+        fake_vcf_path (Path or None): Path to the fake VCF file or None to write to standard output.
         num_rows (int): Number of rows.
         num_samples (int): Number of samples.
         chromosome (str): Chromosome identifier.
@@ -73,6 +74,7 @@ def fake_vcf_data(
         sample_prefix (str): Prefix for sample names.
         phased (bool): Phased or unphased genotypes.
         large_format (bool): Use large format VCF.
+        reference_dir_path (Path or None): Path to imported reference data.
     """
     virtual_vcf = VirtualVCF(
         num_rows=num_rows,
@@ -82,6 +84,7 @@ def fake_vcf_data(
         random_seed=seed,
         phased=phased,
         large_format=large_format,
+        reference_dir=reference_dir_path,
     )
 
     if fake_vcf_path is None:

@@ -5,6 +5,10 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from tqdm import tqdm
 
+import fake_vcf
+
+METADATA_FILE_NAME = "sequence_metadata.json"
+
 
 def get_ref_at_pos(ref_data, position):
     reference_value = ref_data.take([position])[0][0].as_py()
@@ -65,15 +69,19 @@ def import_reference(file_path, output_dir, include_sequences=None):
     else:
         print(f"Getting all sequences from {file_path}")
 
-    sequence_metadata_path = output_dir / "sequence_metadata.json"
+    sequence_metadata_path = output_dir / METADATA_FILE_NAME
 
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
-    sequence_metadata = {"reference_file": file_path.name}
+    sequence_metadata = {
+        "reference_file": file_path.name,
+        "fake-vcf-version": fake_vcf.version,
+        "reference_files": {},
+    }
 
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
         parquet_file = output_dir / f"reference_{parsed_sequence['id']}.parquet"
-        sequence_metadata[parsed_sequence["id"]] = parquet_file.name
+        sequence_metadata["reference_files"][parsed_sequence["id"]] = parquet_file.name
 
         table_chr = pa.Table.from_arrays(
             [pa.array(parsed_sequence["sequence"], pa.string())],

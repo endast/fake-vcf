@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+import fake_vcf
 import fake_vcf.vcf_reference as reference
 from fake_vcf.vcf_faker import VirtualVCF
 from tests.test_vcf_fake import get_vcf_data
@@ -157,7 +158,6 @@ def test_parquet_reference():
     sample_count = 10
 
     reference_dir = test_data_dir / "reference/parquet"
-    reference_file = reference_dir / f"fasta_{chrom}.parquet"
 
     seed_value = 42
 
@@ -166,8 +166,8 @@ def test_parquet_reference():
         num_rows=row_count,
         num_samples=sample_count,
         random_seed=seed_value,
-        chromosome="chr1",
-        reference_file=reference_file,
+        chromosome=chrom,
+        reference_dir=reference_dir,
     )
     data_rows, metadata = get_vcf_data(virtual_vcf)
     columns = data_rows[0].split("\t")
@@ -181,7 +181,6 @@ def test_parquet_reference_outside_reference():
     chrom = "chr1"
 
     reference_dir = test_data_dir / "reference/parquet"
-    reference_parquet_file = reference_dir / f"fasta_{chrom}.parquet"
 
     seed_value = 42
 
@@ -190,8 +189,26 @@ def test_parquet_reference_outside_reference():
             num_rows=100,
             num_samples=10,
             random_seed=seed_value,
-            chromosome="chr1",
-            reference_file=reference_parquet_file,
+            chromosome=chrom,
+            reference_dir=reference_dir,
+        )
+
+
+@pytest.mark.reference_import
+def test_parquet_reference_not_in_reference():
+    chrom = "chrX"
+
+    reference_dir = test_data_dir / "reference/parquet"
+
+    seed_value = 42
+
+    with pytest.raises(ValueError):
+        VirtualVCF(
+            num_rows=100,
+            num_samples=10,
+            random_seed=seed_value,
+            chromosome=chrom,
+            reference_dir=reference_dir,
         )
 
 
@@ -205,5 +222,7 @@ def test_import_reference(tmp_path):
     with open(output_dir / "sequence_metadata.json") as metadata_file:
         metadata = json.load(metadata_file)
 
-    for seq_id, reference_path in metadata.items():
+    for seq_id, reference_path in metadata["reference_files"].items():
         assert (output_dir / reference_path).exists()
+
+    assert metadata["fake-vcf-version"] == fake_vcf.version

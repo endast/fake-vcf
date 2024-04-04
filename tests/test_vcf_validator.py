@@ -85,8 +85,9 @@ def test_vcf_file_validation(cli_args: tuple, tmp_path):
         vcf_file_path=vcf_file_path, result_path=tmp_path
     )
 
+    assert validator_status.returncode == 0
+
     assert (
         "According to the VCF specification, the input file is valid"
         in validation_result
     )
-    assert validator_status.returncode == 0
