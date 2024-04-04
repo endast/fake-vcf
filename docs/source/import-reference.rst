@@ -10,7 +10,7 @@ Parameters:
     reference_file_path (Path): Path to reference fasta file.
     reference_storage_path (Path): Where to store the references.
     included_chromosomes (Optional[List[str]], optional): List of chromosomes
-        to extract from reference. If not specified, all will be imported.
+    to extract from reference. If not specified, all will be imported.
 
 Example:
     To import a reference file and extract specific chromosomes:
