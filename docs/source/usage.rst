@@ -25,7 +25,7 @@ By default `fake-vcf` writes to stdout
 
   poetry run fake-vcf -s 2 -r 2
   ##fileformat=VCFv4.2
-  ##source=VCFake 0.1.0
+  ##source=VCFake 0.2.0
   ##FILTER=<ID=PASS,Description="All filters passed">
   ##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
   ##contig=<ID=chr1>
