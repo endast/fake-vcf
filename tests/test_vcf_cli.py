@@ -11,6 +11,8 @@ runner = CliRunner()
 
 GENERATE_CMD = "generate"
 IMPORT_REFERENCE_CMD = "import-reference"
+test_data_dir = Path(__file__).resolve().parent / "test_data"
+reference_dir = test_data_dir / "reference/parquet"
 
 
 def is_gz_file(filepath):
@@ -205,6 +207,22 @@ def test_face_vcf_generation_nr_rows(expected_rows):
 
 @pytest.mark.generate_vcf
 @pytest.mark.parametrize(
+    ("expected_rows",),
+    [
+        *[(r,) for r in range(1, 10, 1)],
+    ],
+)
+def test_face_vcf_generation_nr_rows_with_reference(expected_rows):
+    result = runner.invoke(
+        app, [GENERATE_CMD, "-r", f"{expected_rows}", "-f", f"{reference_dir}"]
+    )
+    row_count = len([r for r in result.stdout.split("\n") if r.startswith("chr1")])
+    assert result.exit_code == 0
+    assert row_count == expected_rows
+
+
+@pytest.mark.generate_vcf
+@pytest.mark.parametrize(
     ("expected_sample_count",),
     [
         *[(r,) for r in range(1, 100, 10)],
@@ -212,6 +230,24 @@ def test_face_vcf_generation_nr_rows(expected_rows):
 )
 def test_face_vcf_generation_nr_samples(expected_sample_count):
     result = runner.invoke(app, [GENERATE_CMD, "-s", f"{expected_sample_count}"])
+    sample_count = len(
+        [r for r in result.stdout.split("\n") if r.startswith("chr1")][0].split("\t")
+    )
+    assert result.exit_code == 0
+    assert sample_count == expected_sample_count + NR_NON_SAMPLE_COL
+
+
+@pytest.mark.generate_vcf
+@pytest.mark.parametrize(
+    ("expected_sample_count",),
+    [
+        *[(r,) for r in range(1, 100, 10)],
+    ],
+)
+def test_face_vcf_generation_nr_samples_with_reference(expected_sample_count):
+    result = runner.invoke(
+        app, [GENERATE_CMD, "-s", f"{expected_sample_count}", "-f", f"{reference_dir}"]
+    )
     sample_count = len(
         [r for r in result.stdout.split("\n") if r.startswith("chr1")][0].split("\t")
     )
