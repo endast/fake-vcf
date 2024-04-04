@@ -1,5 +1,5 @@
 Import reference
-===============
+================
 
 `fake-vcf import-reference`
 ---------------------------
