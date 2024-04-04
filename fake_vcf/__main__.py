@@ -57,9 +57,6 @@ def vcf_reference_import(
         included_chromosomes (Optional[List[str]], optional): List of chromosomes
             to extract from reference. If not specified, all will be imported.
 
-    Returns:
-        None: This function does not return anything.
-
     Example:
         To import a reference file and extract specific chromosomes:
         ```
