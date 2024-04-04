@@ -68,7 +68,7 @@ def import_reference(file_path, output_dir, include_sequences=None):
     sequence_metadata_path = output_dir / "sequence_metadata.json"
 
     parsed_sequences = parse_fasta(file_path, include_sequences=include_sequences)
-    sequence_metadata = {}
+    sequence_metadata = {"reference_file": file_path.name}
 
     for parsed_sequence in (pbar := tqdm(parsed_sequences)):
         pbar.set_description(f"Processing {parsed_sequence['id']}")
