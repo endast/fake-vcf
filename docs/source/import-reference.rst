@@ -1,7 +1,4 @@
 Import reference
-=====
-
-Import reference
 ===============
 
 `fake-vcf import-reference`
@@ -18,13 +15,11 @@ Parameters:
 Example:
     To import a reference file and extract specific chromosomes:
     ::
-
-        vcf_reference_import("path/to/reference.fasta", "output/directory", included_chromosomes=["chr1", "chr2"])
+    vcf_reference_import("path/to/reference.fasta", "output/directory", included_chromosomes=["chr1", "chr2"])
 
     To import a reference file without extracting specific chromosomes:
     ::
-
-        vcf_reference_import("path/to/reference.fasta", "output/directory")
+    vcf_reference_import("path/to/reference.fasta", "output/directory")
 
 Usage
 -----
