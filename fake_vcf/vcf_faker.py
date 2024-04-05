@@ -136,7 +136,9 @@ class VirtualVCF:
 
         self.reference_data = None
         if self.reference_dir:
-            self.reference_data = vcf_reference.load_reference_data(self.reference_file)
+            self.reference_data = vcf_reference.load_reference_data(
+                self.reference_file, memory_map=False
+            )
             if self.reference_data.shape[0] < max(self.positions):
                 raise ValueError(
                     f"""Max position size {max(self.positions)} is outside the reference which has a max of {len(self.reference_data)}"""

@@ -10,12 +10,12 @@ import fake_vcf
 METADATA_FILE_NAME = "sequence_metadata.json"
 
 
-def get_ref_at_pos(ref_data, position):
-    reference_value = ref_data.take([position])[0][0].as_py()
+def get_ref_at_pos(ref_data: pa.array, position):
+    reference_value = ref_data.column(0)[position].as_py()
     return reference_value
 
 
-def load_reference_data(reference_file, memory_map=True):
+def load_reference_data(reference_file, memory_map):
     reference_data = pq.read_table(reference_file, memory_map=memory_map)
     return reference_data
 
