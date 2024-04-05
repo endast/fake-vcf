@@ -1,0 +1,16 @@
+{
+  "source_reference_file": "test-reference.fa",
+  "fake-vcf-version": "0.2.0",
+  "reference_files": {
+    "chr1": "fasta_chr1.parquet",
+    "chr2": "fasta_chr2.parquet",
+    "chr3": "fasta_chr3.parquet",
+    "chr4": "fasta_chr4.parquet",
+    "chr5": "fasta_chr5.parquet",
+    "chr6": "fasta_chr6.parquet",
+    "chr7": "fasta_chr7.parquet",
+    "chr8": "fasta_chr8.parquet",
+    "chr9": "fasta_chr9.parquet",
+    "chr10": "fasta_chr10.parquet"
+  }
+}

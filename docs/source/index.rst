@@ -7,7 +7,8 @@ Welcome to fake-vcf's documentation!
 ====================================
 
 .. toctree::
-   usage
+   overview
+   import-reference
    api
    :maxdepth: 2
    :caption: Contents:

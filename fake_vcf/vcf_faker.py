@@ -1,9 +1,11 @@
-from typing import Optional
+from __future__ import annotations
 
+import json
 import random
 from collections import deque
+from pathlib import Path
 
-from fake_vcf import version
+from fake_vcf import vcf_reference, version
 
 
 class VirtualVCF:
@@ -12,10 +14,11 @@ class VirtualVCF:
         num_rows: int,
         num_samples: int,
         chromosome: str,
-        sample_prefix: Optional[str] = "SAMPLES",
-        random_seed: Optional[int] = None,
-        phased: Optional[bool] = True,
-        large_format: Optional[bool] = True,
+        sample_prefix: str | None = "SAMPLES",
+        random_seed: int | None = None,
+        phased: bool | None = True,
+        large_format: bool | None = True,
+        reference_dir: str | Path | None = None,
     ):
         """
         Initialize VirtualVCF object.
@@ -28,6 +31,7 @@ class VirtualVCF:
             random_seed (int, optional): Random seed for reproducibility. Defaults to None.
             phased (bool, optional): Phased or unphased genotypes. Defaults to True.
             large_format (bool, optional): Use large format VCF. Defaults to True.
+            reference_dir (str or Path, optional): Path to reference file directory.
 
         Raises:
             ValueError: If num_samples or num_rows is less than 1.
@@ -41,6 +45,11 @@ class VirtualVCF:
         # Use a per instance seed for reproducibility
         self.random = random.Random(random_seed)
         self.large_format = large_format
+        self.reference_dir = Path(reference_dir) if reference_dir else None
+        self.reference_file = None
+        self.reference_metadata = {}
+        self._setup_reference_data()
+
         self.header = "\n".join(
             [
                 "##fileformat=VCFv4.2",
@@ -48,7 +57,7 @@ class VirtualVCF:
                 '##FILTER=<ID=PASS,Description="All filters passed">',
                 '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
                 f"##contig=<ID={chromosome}>",
-                "##reference=ftp://ftp.example.com/sample.fa",
+                f"##reference=ftp://ftp.example.com/{self.reference_metadata.get('source_reference_file', 'sample.fa')}",
                 '##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">',
                 '##INFO=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth; some reads may have been filtered">',
                 '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
@@ -125,6 +134,14 @@ class VirtualVCF:
 
         self.current_pos = 0
 
+        self.reference_data = None
+        if self.reference_dir:
+            self.reference_data = vcf_reference.load_reference_data(self.reference_file)
+            if self.reference_data.shape[0] < max(self.positions):
+                raise ValueError(
+                    f"""Max position size {max(self.positions)} is outside the reference which has a max of {len(self.reference_data)}"""
+                )
+
     def __iter__(self):
         """
         Iterates over VirtualVCF object.
@@ -166,6 +183,19 @@ class VirtualVCF:
 
         return self.header
 
+    def _get_ref_at_pos(self, position, ref_index):
+        """
+        Retrieves the reference value at a given position if it exists in reference data
+        or returns the allele at the given index.
+        """
+        if self.reference_data:
+            reference_value = vcf_reference.get_ref_at_pos(
+                self.reference_data, position
+            )
+        else:
+            reference_value = self.alleles[ref_index]
+        return reference_value
+
     def _generate_vcf_row(self):
         """
         Generates a VCF row.
@@ -176,7 +206,7 @@ class VirtualVCF:
         # Generate random values for each field in the VCF row
         pos = f"{position}"
         vid = f"rs{self.random.randint(1, 1000)}"
-        ref = self.alleles[ref_index]
+        ref = self._get_ref_at_pos(position, ref_index)
         alt = self.alleles[ref_index - self.random.randint(1, 2)]
         qual = f"{self.random.randint(10, 100)}"
         filt = self.random.choice(["PASS"])
@@ -202,6 +232,24 @@ class VirtualVCF:
         self.current_pos += 1
 
         return row
+
+    def _setup_reference_data(self):
+
+        if self.reference_dir:
+            with open(
+                self.reference_dir / vcf_reference.METADATA_FILE_NAME
+            ) as metadata_file:
+                self.reference_metadata = json.load(metadata_file)
+
+            if self.chromosome not in self.reference_metadata["reference_files"].keys():
+                raise ValueError(
+                    f"""{self.chromosome} does not exist in the reference data"""
+                )
+
+            self.reference_file = (
+                self.reference_dir
+                / self.reference_metadata["reference_files"][self.chromosome]
+            )
 
     def _generate_vcf_data(self):
         """

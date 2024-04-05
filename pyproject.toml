@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "fake-vcf"
-version = "0.1.0"
+version = "0.2.0"
 description = "A fake vcf file generator "
 readme = "README.md"
 authors = ["fake-vcf <endast@gmail.com>"]
@@ -17,7 +17,7 @@ homepage = "https://github.com/endast/fake-vcf"
 keywords = []  #! Update me
 
 # Pypi classifiers: https://pypi.org/classifiers/
-classifiers = [  #! Update me
+classifiers = [#! Update me
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
@@ -34,15 +34,16 @@ classifiers = [  #! Update me
 [tool.poetry.dependencies]
 python = "^3.9"
 
-typer = {extras = ["all"], version = "^0.12.0"}
+typer = "<0.12.0"
 rich = "^13.7.1"
 tqdm = "^4.66.0"
+pyarrow = "^15.0.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.8"
-black = {version = "^24.3.0", allow-prereleases = false}
+black = { version = "^24.3.0", allow-prereleases = false }
 darglint = "^1.8.1"
-isort = {extras = ["colors"], version = "^5.13.2"}
+isort = { extras = ["colors"], version = "^5.13.2" }
 pre-commit = "^3.7.0"
 pydocstyle = "^6.3.0"
 pylint = "^3.1.0"
@@ -70,6 +71,7 @@ black = "^24.3.0"
 safety = "^3.1.0"
 pytest-xdist = "^3.4.0"
 pytest-random-order = "^1.1.1"
+deptry = "^0.14.2"
 
 [tool.poetry.group.bgzip]
 optional = true
@@ -117,8 +119,13 @@ color_output = true
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
 # Directories that are not visited by pytest collector:
-norecursedirs =["hooks", "*.egg", ".eggs", "dist", "build", "docs", ".tox", ".git", "__pycache__"]
+norecursedirs = ["hooks", "*.egg", ".eggs", "dist", "build", "docs", ".tox", ".git", "__pycache__"]
 doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+markers = [
+  "generate_vcf: generate vcf tests",
+  "reference_import: reference import tests"
+
+]
 
 # Extra options:
 addopts = [
@@ -132,7 +139,7 @@ addopts = [
 source = ["tests"]
 
 [coverage.paths]
-source = "fake-vcf"
+source = "fake_vcf"
 
 [coverage.run]
 branch = true

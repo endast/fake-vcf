@@ -23,9 +23,9 @@ By default `fake-vcf` writes to stdout
 
 .. code-block::
 
-  poetry run fake-vcf -s 2 -r 2
+  poetry run fake-vcf generate -s 2 -r 2
   ##fileformat=VCFv4.2
-  ##source=VCFake 0.1.0
+  ##source=VCFake 0.2.0
   ##FILTER=<ID=PASS,Description="All filters passed">
   ##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
   ##contig=<ID=chr1>
@@ -43,7 +43,7 @@ You can write to a vcf file by piping the output to a file:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 > fake_file.vcf
+  poetry run fake-vcf generate -s 2 -r 2 > fake_file.vcf
   ls -lah
   total 1
   -rw-r--r--   1 magnus  staff   682B Jul 28 16:48 fake_file.vcf
@@ -52,7 +52,7 @@ Or let the script write to a file directly using `-o`:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf
+  poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf
 
   Writing to file fake_file.vcf
   (No compression)
@@ -67,7 +67,7 @@ And if you want the file gzipped add .gz to the file name:
 
 .. code-block:: shell
 
-  poetry run fake-vcf -s 2 -r 2 -o fake_file.vcf.gz
+  poetry run fake-vcf generate -s 2 -r 2 -o fake_file.vcf.gz
 
   Writing to file fake_file.vcf
   (No compression)
@@ -84,18 +84,22 @@ To see all options use --help
 
 .. code-block:: shell
 
-    poetry run fake-vcf --help
+   Usage: fake-vcf generate [OPTIONS]
 
-   Usage: fake-vcf [OPTIONS]
+   Generate fake VCF data
+   Args:     fake_vcf_path (Path): Path to fake VCF file or None to write to standard output.     num_rows (int): Number of rows.     num_samples (int): Number of samples.     chromosome (str): Chromosome identifier.     seed (int): Random seed for reproducibility.     sample_prefix (str): Prefix for sample
+   names.     phased (bool): Simulate phased genotypes.     large_format (bool): Write large format VCF.     print_version (bool): Flag to print the version of the fake-vcf package.     reference_dir (Path): Path to directory containing imported reference_data.
 
   ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-  │ --fake_vcf_path  -o                 PATH     Path to fake vcf file. If the path ends with .gz the file will be gzipped. [default: None]                                                                                                                                                                            │
-  │ --num_rows       -r                 INTEGER  Nr rows to generate (variants) [default: 10]                                                                                                                                                                                                                          │
-  │ --num_samples    -s                 INTEGER  Nr of num_samples to generate. [default: 10]                                                                                                                                                                                                                          │
-  │ --chromosome     -c                 TEXT     chromosome default chr1 [default: chr1]                                                                                                                                                                                                                               │
-  │ --seed                              INTEGER  Random seed to use [default: 42]                                                                                                                                                                                                                                      │
-  │ --sample_prefix  -p                 TEXT     Sample prefix ex: SAM =>  SAM0000001    SAM0000002 [default: S]                                                                                                                                                                                                       │
-  │ --phased             --no-phased             Simulate phased [default: phased]                                                                                                                                                                                                                                     │
-  │ --version        -v                          Prints the version of the fake-vcf package.                                                                                                                                                                                                                           │
-  │ --help                                       Show this message and exit.                                                                                                                                                                                                                                           │
+  │ --fake_vcf_path       -o                       PATH     Path to fake vcf file. If the path ends with .gz the file will be gzipped. [default: None]                                                                                                                                                                 │
+  │ --num_rows            -r                       INTEGER  Nr rows to generate (variants) [default: 10]                                                                                                                                                                                                               │
+  │ --num_samples         -s                       INTEGER  Nr of num_samples to generate. [default: 10]                                                                                                                                                                                                               │
+  │ --chromosome          -c                       TEXT     chromosome default chr1 [default: chr1]                                                                                                                                                                                                                    │
+  │ --seed                                         INTEGER  Random seed to use, default none. [default: None]                                                                                                                                                                                                          │
+  │ --sample_prefix       -p                       TEXT     Sample prefix ex: SAM =>  SAM0000001    SAM0000002 [default: S]                                                                                                                                                                                            │
+  │ --phased                  --no-phased                   Simulate phased [default: phased]                                                                                                                                                                                                                          │
+  │ --large-format            --no-large-format             Write large format vcf [default: large-format]                                                                                                                                                                                                             │
+  │ --version             -v                                Prints the version of the fake-vcf package.                                                                                                                                                                                                                │
+  │ --reference-dir-path  -f                       PATH     Path to imported refernce directory. [default: None]                                                                                                                                                                                                       │
+  │ --help                                                  Show this message and exit.                                                                                                                                                                                                                                │
   ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

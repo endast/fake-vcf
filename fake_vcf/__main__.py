@@ -1,3 +1,6 @@
+from typing import List
+
+import time
 from pathlib import Path
 
 import typer
@@ -5,6 +8,7 @@ from rich.console import Console
 
 from fake_vcf import version
 from fake_vcf.vcf_generator import fake_vcf_data
+from fake_vcf.vcf_reference import import_reference
 
 app = typer.Typer(
     name="fake-vcf",
@@ -29,7 +33,62 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-@app.command(name="fake-vcf")
+@app.command(name="import-reference")
+def vcf_reference_import(
+    reference_file_path: Path = typer.Argument(
+        help="Path to reference fasta file.",
+    ),
+    reference_storage_path: Path = typer.Argument(
+        help="Where to store the references.",
+    ),
+    included_chromosomes: List[str] = typer.Option(
+        None,
+        "--included_chromosomes",
+        "-c",
+        help="List of chromosomes to extract from reference, if not specified all will be imported",
+    ),
+) -> None:
+    """
+    Import reference fasta file and extract specified chromosomes if provided.
+
+    Parameters:
+        reference_file_path (Path): Path to reference fasta file.
+        reference_storage_path (Path): Where to store the references.
+        included_chromosomes (Optional[List[str]], optional): List of chromosomes
+            to extract from reference. If not specified, all will be imported.
+
+    Example:
+        To import a reference file and extract specific chromosomes:
+        ```
+        vcf_reference_import("path/to/reference.fasta", "output/directory", included_chromosomes=["chr1", "chr2"])
+        ```
+
+        To import a reference file without extracting specific chromosomes:
+        ```
+        vcf_reference_import("path/to/reference.fasta", "output/directory")
+        ```
+    """
+
+    print(f"Importing reference {reference_file_path}")
+    if included_chromosomes:
+        print(
+            f"Importing {len(included_chromosomes)} chromosomes from reference {reference_file_path}: {', '.join(included_chromosomes)}"
+        )
+    else:
+        print(f"Importing all chromosomes from reference {reference_file_path}")
+
+    start_time = time.time()
+    import_reference(
+        file_path=reference_file_path,
+        output_dir=reference_storage_path,
+        include_sequences=included_chromosomes,
+    )
+    end_time = time.time()
+
+    print(f"Reference imported in {end_time - start_time:.2f} seconds.")
+
+
+@app.command(name="generate")
 def main(
     fake_vcf_path: Path = typer.Option(
         None,
@@ -63,9 +122,16 @@ def main(
         is_eager=True,
         help="Prints the version of the fake-vcf package.",
     ),
+    reference_dir: Path = typer.Option(
+        None,
+        "--reference-dir-path",
+        "-f",
+        help="Path to imported refernce directory.",
+        exists=True,
+    ),
 ) -> None:
     """
-    Main function to generate fake VCF data using Typer CLI.
+    Generate fake VCF data
 
     Args:
         fake_vcf_path (Path): Path to fake VCF file or None to write to standard output.
@@ -77,6 +143,7 @@ def main(
         phased (bool): Simulate phased genotypes.
         large_format (bool): Write large format VCF.
         print_version (bool): Flag to print the version of the fake-vcf package.
+        reference_dir (Path): Path to directory containing imported reference_data.
     """
     fake_vcf_data(
         fake_vcf_path=fake_vcf_path,
@@ -87,6 +154,7 @@ def main(
         sample_prefix=sample_prefix,
         phased=phased,
         large_format=large_format,
+        reference_dir_path=reference_dir,
     )
 
 

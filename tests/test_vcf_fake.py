@@ -2,11 +2,16 @@
 
 import typing
 
+from pathlib import Path
+
 import pytest
 
 from fake_vcf.vcf_faker import VirtualVCF
 
 NR_NON_SAMPLE_COL = 9
+
+test_data_dir = Path(__file__).resolve().parent / "test_data"
+reference_dir = test_data_dir / "reference"
 
 
 def get_vcf_data(
@@ -19,6 +24,7 @@ def get_vcf_data(
     return data_rows, metadata
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("num_rows",),
     [
@@ -43,17 +49,23 @@ def test_fake_vcf_row_count(num_rows):
     assert len(data_rows) == num_rows
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
-    ("num_samples",),
+    ("num_samples", "ref_dir"),
     [
-        *[(s,) for s in range(1, 11)],
-        (20,),
-        (50,),
-        (1000,),
-        (1337,),
+        *[(s, None) for s in range(1, 11)],
+        (20, None),
+        (50, None),
+        (1000, None),
+        (1337, None),
+        *[(s, reference_dir / "parquet") for s in range(1, 11)],
+        (20, reference_dir / "parquet"),
+        (50, reference_dir / "parquet"),
+        (1000, reference_dir / "parquet"),
+        (1337, reference_dir / "parquet"),
     ],
 )
-def test_fake_vcf_sample_count(num_samples):
+def test_fake_vcf_sample_count(num_samples, ref_dir):
     virtual_vcf = VirtualVCF(
         num_rows=10,
         num_samples=num_samples,
@@ -61,6 +73,7 @@ def test_fake_vcf_sample_count(num_samples):
         sample_prefix="S",
         random_seed=42,
         phased=False,
+        reference_dir=ref_dir,
     )
 
     data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
@@ -68,13 +81,15 @@ def test_fake_vcf_sample_count(num_samples):
     assert len(samples) - NR_NON_SAMPLE_COL == num_samples
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
-    ("num_samples",),
+    ("num_samples", "ref_dir"),
     [
-        *[(s,) for s in range(-10, 1)],
+        *[(s, None) for s in range(-10, 1)],
+        *[(s, reference_dir / "parquet") for s in range(-10, 1)],
     ],
 )
-def test_invalid_sample_count(num_samples):
+def test_invalid_sample_count(num_samples, ref_dir):
     with pytest.raises(ValueError):
         VirtualVCF(
             num_rows=10,
@@ -83,16 +98,19 @@ def test_invalid_sample_count(num_samples):
             sample_prefix="S",
             random_seed=42,
             phased=False,
+            reference_dir=ref_dir,
         )
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
-    ("num_rows",),
+    ("num_rows", "ref_dir"),
     [
-        *[(r,) for r in range(-10, 1)],
+        *[(r, None) for r in range(-10, 1)],
+        *[(r, reference_dir / "parquet") for r in range(-10, 1)],
     ],
 )
-def test_invalid_row_count(num_rows):
+def test_invalid_row_count(num_rows, ref_dir):
     with pytest.raises(ValueError):
         VirtualVCF(
             num_rows=num_rows,
@@ -101,24 +119,32 @@ def test_invalid_row_count(num_rows):
             sample_prefix="S",
             random_seed=42,
             phased=False,
+            reference_dir=ref_dir,
         )
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
-    (
-        "num_samples",
-        "sample_prefix",
-        "expected",
-    ),
+    ("num_samples", "sample_prefix", "expected", "ref_dir"),
     [
-        (1, "SAM", ["SAM0000001"]),
-        (2, "SAM", ["SAM0000001", "SAM0000002"]),
-        (3, "SAM", ["SAM0000001", "SAM0000002", "SAM0000003"]),
-        (9, "SAM", [f"SAM000000{i}" for i in range(1, 10)]),
-        (9, "", [f"000000{i}" for i in range(1, 10)]),
+        (1, "SAM", ["SAM0000001"], None),
+        (2, "SAM", ["SAM0000001", "SAM0000002"], None),
+        (3, "SAM", ["SAM0000001", "SAM0000002", "SAM0000003"], None),
+        (9, "SAM", [f"SAM000000{i}" for i in range(1, 10)], None),
+        (9, "", [f"000000{i}" for i in range(1, 10)], None),
+        (1, "SAM", ["SAM0000001"], reference_dir / "parquet"),
+        (2, "SAM", ["SAM0000001", "SAM0000002"], reference_dir / "parquet"),
+        (
+            3,
+            "SAM",
+            ["SAM0000001", "SAM0000002", "SAM0000003"],
+            reference_dir / "parquet",
+        ),
+        (9, "SAM", [f"SAM000000{i}" for i in range(1, 10)], reference_dir / "parquet"),
+        (9, "", [f"000000{i}" for i in range(1, 10)], reference_dir / "parquet"),
     ],
 )
-def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
+def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected, ref_dir):
     virtual_vcf = VirtualVCF(
         num_rows=10,
         num_samples=num_samples,
@@ -126,6 +152,7 @@ def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
         sample_prefix=sample_prefix,
         random_seed=42,
         phased=False,
+        reference_dir=ref_dir,
     )
 
     data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
@@ -134,6 +161,7 @@ def test_fake_vcf_sample_prefix(num_samples, sample_prefix, expected):
     assert sample_names == expected
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     ("chromosome",),
     [
@@ -158,15 +186,28 @@ def test_fake_vcf_chromosome(chromosome):
     assert vcf_chromosome == chromosome
 
 
-def test_fake_vcf_reproducibility():
+@pytest.mark.generate_vcf
+@pytest.mark.parametrize(
+    "ref_dir",
+    [(None), (reference_dir / "parquet")],
+)
+def test_fake_vcf_reproducibility(ref_dir):
     seed_value = 42
 
     orig_virtual_vcf = VirtualVCF(
-        num_rows=10, num_samples=10, random_seed=seed_value, chromosome="chr1"
+        num_rows=10,
+        num_samples=10,
+        random_seed=seed_value,
+        chromosome="chr1",
+        reference_dir=ref_dir,
     )
 
     new_virtual_vcf = VirtualVCF(
-        num_rows=10, num_samples=10, random_seed=seed_value, chromosome="chr1"
+        num_rows=10,
+        num_samples=10,
+        random_seed=seed_value,
+        chromosome="chr1",
+        reference_dir=ref_dir,
     )
 
     orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)
@@ -174,16 +215,29 @@ def test_fake_vcf_reproducibility():
     assert orig_data == new_data
 
 
-def test_fake_vcf_novel_data():
+@pytest.mark.generate_vcf
+@pytest.mark.parametrize(
+    "ref_dir",
+    [(None), (reference_dir / "parquet")],
+)
+def test_fake_vcf_novel_data(ref_dir):
     first_seed = 42
     second_seed = 1337
 
     orig_virtual_vcf = VirtualVCF(
-        num_rows=10, num_samples=10, random_seed=first_seed, chromosome="chr1"
+        num_rows=10,
+        num_samples=10,
+        random_seed=first_seed,
+        chromosome="chr1",
+        reference_dir=ref_dir,
     )
 
     new_virtual_vcf = VirtualVCF(
-        num_rows=10, num_samples=10, random_seed=second_seed, chromosome="chr1"
+        num_rows=10,
+        num_samples=10,
+        random_seed=second_seed,
+        chromosome="chr1",
+        reference_dir=ref_dir,
     )
 
     orig_data = get_vcf_data(virtual_vcf=orig_virtual_vcf)

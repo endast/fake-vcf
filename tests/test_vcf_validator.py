@@ -9,13 +9,14 @@ import pytest
 from typer.testing import CliRunner
 
 from fake_vcf.__main__ import app
+from tests.test_vcf_cli import GENERATE_CMD
 
 runner = CliRunner()
 
 test_file_parent = Path(__file__).resolve().parent
 
 
-def vcf_validator():
+def vcf_validator():  # pragma: no cover
     vcf_validator_path = test_file_parent / "../vcf_validator/vcf_validator"
     system_platform = platform.system()
     if not vcf_validator_path.exists():
@@ -52,6 +53,7 @@ def run_vcf_validator(vcf_file_path, result_path):
     return result, "\n".join(all_error_data)
 
 
+@pytest.mark.generate_vcf
 @pytest.mark.parametrize(
     "cli_args",
     list(
@@ -67,7 +69,7 @@ def run_vcf_validator(vcf_file_path, result_path):
     ),
 )
 def test_vcf_file_validation(cli_args: tuple, tmp_path):
-    args = []
+    args = [GENERATE_CMD]
     for cli_arg in cli_args:
         if isinstance(cli_arg, list):
             args += cli_arg
@@ -83,8 +85,9 @@ def test_vcf_file_validation(cli_args: tuple, tmp_path):
         vcf_file_path=vcf_file_path, result_path=tmp_path
     )
 
+    assert validator_status.returncode == 0
+
     assert (
         "According to the VCF specification, the input file is valid"
         in validation_result
     )
-    assert validator_status.returncode == 0
