@@ -192,7 +192,7 @@ class VirtualVCF:
         """
         if self.reference_data:
             reference_value = vcf_reference.get_ref_at_pos(
-                self.reference_data, position
+                self.reference_data, position - 1 
             )
         else:
             reference_value = self.alleles[ref_index]
