@@ -1,6 +1,6 @@
 {
   "source_reference_file": "test-reference.fa",
-  "fake-vcf-version": "0.2.1",
+  "fake-vcf-version": "0.2.2",
   "reference_files": {
     "chr1": "fasta_chr1.parquet",
     "chr2": "fasta_chr2.parquet",

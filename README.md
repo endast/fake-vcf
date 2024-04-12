@@ -47,7 +47,7 @@ By default `fake-vcf` writes to stdout
 ```shell
 poetry run fake-vcf generate -s 2 -r 2
 ##fileformat=VCFv4.2
-##source=VCFake 0.2.1
+##source=VCFake 0.2.2
 ##FILTER=<ID=PASS,Description="All filters passed">
 ##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
 ##contig=<ID=chr1>
