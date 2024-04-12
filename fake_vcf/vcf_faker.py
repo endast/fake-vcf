@@ -116,13 +116,29 @@ class VirtualVCF:
                 f"{sv}:{self.random.choice(extra_data)}" for sv in self.sample_values
             ]
 
-        self.avail_samples = deque(
+        self.available_samples = deque(
             self.random.choices(
                 self.sample_values,
                 weights=self.sample_value_weights,
                 k=self.num_samples,
             )
         )
+
+        # Check so that at lest one sample in avail_samples is not 0|0 or 0/0
+        if all(
+            [
+                sample.startswith(self.sample_values[0])
+                for sample in self.available_samples
+            ]
+        ):
+            if self.phased:
+                self.available_samples[0] = self.available_samples[0].replace(
+                    "0", "1", 1
+                )
+            else:
+                self.available_samples[0] = self.available_samples[0].replace(
+                    "0/0", "0/1", 1
+                )
 
         self.alleles = ["A", "C", "G", "T"]
 
@@ -225,8 +241,8 @@ class VirtualVCF:
         max_rotation = (
             int(self.num_samples / 10) if self.num_samples >= 10 else self.num_samples
         )
-        self.avail_samples.rotate(self.random.randint(1, max_rotation))
-        samples = self.avail_samples.copy()
+        self.available_samples.rotate(self.random.randint(1, max_rotation))
+        samples = self.available_samples.copy()
 
         row = (
             "\t".join((self.chromosome, pos, vid, ref, alt, qual, filt, info, fmt))
