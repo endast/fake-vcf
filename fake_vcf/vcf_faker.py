@@ -209,7 +209,10 @@ class VirtualVCF:
         pos = f"{position}"
         vid = f"rs{self.random.randint(1, 1000)}"
         ref = self._get_ref_at_pos(position, ref_index)
-        alt = self.alleles[ref_index - self.random.randint(1, 2)]
+        if ref in self.alleles:
+            alt = self.alleles[self.alleles.index(ref) - self.random.randint(1, 3)]
+        else:
+            alt = self.alleles[ref_index - self.random.randint(1, 3)]
         qual = f"{self.random.randint(10, 100)}"
         filt = self.random.choice(["PASS"])
         info = f"DP=10;AF=0.5;NS={self.num_samples}"
