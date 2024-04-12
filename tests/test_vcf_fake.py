@@ -51,28 +51,38 @@ def test_fake_vcf_row_count(num_rows):
 
 @pytest.mark.generate_vcf
 @pytest.mark.parametrize(
-    ("num_rows", "phased"),
+    ("num_rows", "phased", "large_format"),
     [
-        *[(r, True) for r in range(1, 11)],
-        (20, True),
-        (50, True),
-        (1000, True),
-        (1337, True),
-        *[(r, False) for r in range(1, 11)],
-        (20, False),
-        (50, False),
-        (1000, False),
-        (1337, False),
+        *[(r, True, True) for r in range(1, 11)],
+        (20, True, True),
+        (50, True, True),
+        (1000, True, True),
+        (1337, True, True),
+        *[(r, False, True) for r in range(1, 11)],
+        (20, False, True),
+        (50, False, True),
+        (1000, False, True),
+        (1337, False, True),
+        *[(r, True, False) for r in range(1, 11)],
+        (20, True, False),
+        (50, True, False),
+        (1000, True, False),
+        (1337, True, False),
+        *[(r, False, False) for r in range(1, 11)],
+        (20, False, False),
+        (50, False, False),
+        (1000, False, False),
+        (1337, False, False),
     ],
 )
-def test_fake_vcf_never_zero(num_rows, phased):
+def test_fake_vcf_never_zero(num_rows, phased, large_format):
     virtual_vcf = VirtualVCF(
         num_rows=num_rows,
         num_samples=10,
         chromosome="chr1",
         sample_prefix="S",
         phased=phased,
-        large_format=False,
+        large_format=large_format,
     )
 
     data_rows, metadata = get_vcf_data(virtual_vcf=virtual_vcf)
