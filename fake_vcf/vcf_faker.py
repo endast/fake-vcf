@@ -124,6 +124,21 @@ class VirtualVCF:
             )
         )
 
+        # Check so that at lest one sample in avail_samples is not 0|0 or 0/0
+        if all(
+            [sample.startswith(self.sample_values[0]) for sample in self.avail_samples]
+        ):
+            selected_sample = random.randint(0, len(self.avail_samples) - 1)
+
+            if self.phased:
+                self.avail_samples[selected_sample] = self.avail_samples[
+                    selected_sample
+                ].replace("0", "1", 1)
+            else:
+                self.avail_samples[selected_sample] = self.avail_samples[
+                    selected_sample
+                ].replace("0/0", "0/1", 1)
+
         self.alleles = ["A", "C", "G", "T"]
 
         # Generate and sort positions
