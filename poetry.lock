@@ -1505,13 +1505,13 @@ files = [
 
 [[package]]
 name = "safety"
-version = "3.2.0"
+version = "3.2.1"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "safety-3.2.0-py3-none-any.whl", hash = "sha256:a432fc9d17e79a4386c4f093656b617c56f839cde022649cfa796d72c7a544de"},
-    {file = "safety-3.2.0.tar.gz", hash = "sha256:8bd5cab5f3d8a61ce0ea6e98f267c1006d056097c45c644fee7afeff7d5949c1"},
+    {file = "safety-3.2.1-py3-none-any.whl", hash = "sha256:9f53646717ba052e1bf631bd54fb3da0fafa58e85d578b20a8b9affdcf81889e"},
+    {file = "safety-3.2.1.tar.gz", hash = "sha256:770aed6ff46536e5363a409e8cca411d8636d07dc33be53a8ac69bf750ab8df3"},
 ]
 
 [package.dependencies]
@@ -1726,4 +1726,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "4810de6a485610e70227b14c9ecf69d848aef73083e835b70e1c0cf7e1fd6d01"
+content-hash = "88334167f2467722fc0bc70cc0c1d3fee67ad423c4689e7fd0ae3e63bf5a9f95"
