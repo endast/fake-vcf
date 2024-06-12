@@ -1315,13 +1315,13 @@ testing = ["filelock"]
 
 [[package]]
 name = "pyupgrade"
-version = "3.15.2"
+version = "3.16.0"
 description = "A tool to automatically upgrade syntax for newer versions."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "pyupgrade-3.15.2-py2.py3-none-any.whl", hash = "sha256:ce309e0ff8ecb73f56a45f12570be84bbbde9540d13697cacb261a7f595fb1f5"},
-    {file = "pyupgrade-3.15.2.tar.gz", hash = "sha256:c488d6896c546d25845712ef6402657123008d56c1063174e27aabe15bd6b4e5"},
+    {file = "pyupgrade-3.16.0-py2.py3-none-any.whl", hash = "sha256:7a54ee28f3024d027048d49d101e5c702e88c85edc3a1d08b636c50ebef2a97d"},
+    {file = "pyupgrade-3.16.0.tar.gz", hash = "sha256:237893a05d5b117259b31b423f23cbae4bce0b7eae57ba9a52c06098c2ddd76f"},
 ]
 
 [package.dependencies]
@@ -1726,4 +1726,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "88334167f2467722fc0bc70cc0c1d3fee67ad423c4689e7fd0ae3e63bf5a9f95"
+content-hash = "5eab60007382ecdcdc3752c4f82fb6128ade59fe34fd2d90780daaa919153e57"
