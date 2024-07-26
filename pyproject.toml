@@ -71,7 +71,7 @@ black = "^24.4.2"
 safety = "^3.2.4"
 pytest-xdist = "^3.6.1"
 pytest-random-order = "^1.1.1"
-deptry = "^0.16.2"
+deptry = "^0.17.0"
 
 [tool.poetry.group.bgzip]
 optional = true
