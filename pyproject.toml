@@ -36,7 +36,7 @@ python = "^3.9"
 
 typer = "<0.13.0"
 rich = "^13.7.1"
-tqdm = "^4.66.4"
+tqdm = "^4.66.5"
 pyarrow = "^17.0.0"
 
 [tool.poetry.dev-dependencies]
