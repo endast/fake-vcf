@@ -35,7 +35,7 @@ classifiers = [#! Update me
 python = "^3.9"
 
 typer = "<0.13.0"
-rich = "^13.8.0"
+rich = "^13.8.1"
 tqdm = "^4.66.5"
 pyarrow = "^17.0.0"
 
