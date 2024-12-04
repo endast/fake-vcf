@@ -34,7 +34,7 @@ classifiers = [#! Update me
 [tool.poetry.dependencies]
 python = "^3.9"
 
-typer = "<0.13.0"
+typer = "<0.16.0"
 rich = "^13.8.1"
 tqdm = "^4.67.1"
 pyarrow = "^17.0.0"
