@@ -44,7 +44,7 @@ bandit = "^1.8.0"
 black = { version = "^24.10.0", allow-prereleases = false }
 darglint = "^1.8.1"
 isort = { extras = ["colors"], version = "^5.13.2" }
-pre-commit = "^3.8.0"
+pre-commit = "^4.0.1"
 pydocstyle = "^6.3.0"
 pylint = "^3.3.2"
 pytest = "^8.3.3"
@@ -58,7 +58,7 @@ pytest-cov = "^6.0.0"
 bandit = "^1.8.0"
 darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.13.2"}
-pre-commit = "^3.8.0"
+pre-commit = "^4.0.1"
 pydocstyle = "^6.3.0"
 pylint = "^3.3.2"
 pytest = "^8.3.3"
