@@ -37,7 +37,7 @@ python = "^3.9"
 typer = "<0.16.0"
 rich = "^13.9.4"
 tqdm = "^4.67.1"
-pyarrow = "^17.0.0"
+pyarrow = "^18.1.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.9"
