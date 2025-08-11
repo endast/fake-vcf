@@ -2053,18 +2053,15 @@ typing-extensions = ">=3.7.4.3"
 
 [[package]]
 name = "types-setuptools"
-version = "76.0.0.20250313"
+version = "80.9.0.20250809"
 description = "Typing stubs for setuptools"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_setuptools-76.0.0.20250313-py3-none-any.whl", hash = "sha256:bf454b2a49b8cfd7ebcf5844d4dd5fe4c8666782df1e3663c5866fd51a47460e"},
-    {file = "types_setuptools-76.0.0.20250313.tar.gz", hash = "sha256:b2be66f550f95f3cad2a7d46177b273c7e9c80df7d257fa57addbbcfc8126a9e"},
+    {file = "types_setuptools-80.9.0.20250809-py3-none-any.whl", hash = "sha256:7c6539b4c7ac7b4ab4db2be66d8a58fb1e28affa3ee3834be48acafd94f5976a"},
+    {file = "types_setuptools-80.9.0.20250809.tar.gz", hash = "sha256:e986ba37ffde364073d76189e1d79d9928fb6f5278c7d07589cde353d0218864"},
 ]
-
-[package.dependencies]
-setuptools = "*"
 
 [[package]]
 name = "typing-extensions"
